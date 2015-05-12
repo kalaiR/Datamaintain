@@ -1,0 +1,106 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo;
+{% for app in app_list %}
+{% blocktrans with app.name as name %}{{ name }}{% endblocktrans %}
+{% endfor %}
+</div>
+{% endblock %}
+{% endif %}
+
+{% block sidebar %}{% endblock %}
+
+{% block extra_links %}
+{% if 'report' in request.path %}
+    <div class="module">
+    <table summary="Custom links for KPI">
+        <caption><a href="#" class="section">Key Performance Indicator</a></caption>
+        <tr>
+            <th scope="row"><a href="{% url 'kpi_dashboard' %}">KPI Overview</a></th>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="{% url 'kpi_dashboard_leadseller' %}">KPI Overview for Lead seller </a></th>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan=2><td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="{% url 'order_rate' %}">Order rate</a></th>
+            <td>&nbsp;</td>
+            <td><a href="{% url 'order_rate' %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="{% url 'match_rate' %}">Match rate</a></th>
+            <td>&nbsp;</td>
+            <td><a href="{% url 'match_rate' %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="{% url 'inventory_value' %}">Inventory value</a></th>
+            <td>&nbsp;</td>
+            <td><a href="{% url 'inventory_value' %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="{% url 'demand_rate' %}">Demand rate</a></th>
+            <td>&nbsp;</td>
+            <td><a href="{% url 'demand_rate' %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+        <tr>
+            <td colspan=2><td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="{% url 'average_slots_price' %}">Average Slots Price(Original price)</a></th>
+            <td>&nbsp;</td>
+            <td><a href="{% url 'average_slots_price' %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="{% url 'average_slots_price_new' %}">Average Slots Price(New price)</a></th>
+            <td>&nbsp;</td>
+            <td><a href="{% url 'average_slots_price_new' %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="{% url 'slots_rate' %}">Slots Rate</a></th>
+            <td>&nbsp;</td>
+            <td><a href="{% url 'slots_rate' %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="{% url 'estimated_payout_lead' %}">Estimated Payout/Lead</a></th>
+            <td>&nbsp;</td>
+            <td><a href="{% url 'estimated_payout_lead' %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+        <tr>
+            <td colspan=2><td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="{% url 'customer_rank' %}">Customer Rank</a></th>
+            <td>&nbsp;</td>
+            <td><a href="{% url 'customer_rank' %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+        <tr>
+            <th scope="row"><a href="{% url 'customer_value' %}">Customer Value</a></th>
+            <td>&nbsp;</td>
+            <td><a href="{% url 'customer_value' %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+    </table>
+    </div>
+    <div class="module" style="display:none">
+    <table summary="Actor card">
+    	<caption><a href="#" class="section">Cards</a></caption>
+        <tr>
+            <th scope="row"><a href="{% url 'actorcard' %}">Actor card</a></th>
+            <td>&nbsp;</td>
+            <td><a href="{% url 'actorcard' %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+    </table>
+    </div>
+{% endif %}
+{% endblock %}

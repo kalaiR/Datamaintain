@@ -1,0 +1,454 @@
+{% extends "fxapi/base.html" %}
+{%block title%}Playground - {%endblock%}
+{%block content%}
+{% load i18n %}
+<div class="container">
+<h1>{% trans "API Playground" %}</h1>
+<div class="row">
+  <div class="span6">
+
+    {%if clients%}
+
+    <h3> </h3>
+
+    <form class="form-horizontal" id="api_form">
+      <legend><a class="pull-right btn btn-mini btn-success" href="/apidocs/clients/">{% trans "Create New Application" %}</a> {% trans "Try API" %} </legend>
+
+
+      <div class="control-group">
+        <label class="control-label" for="applications">{% trans "Applications" %}</label>
+        <div class="controls">
+          <select id="applications">
+            <option value=''>---{% trans "Select your application" %}---</option>
+            {%for client in clients%}
+            <option value={{client.pk}}>{{client.name}}</option>
+            {%endfor%}
+          </select>
+        </div>
+      </div>
+
+      {%for client in clients%}
+        <div class="control-group hide action_select_box" id="action_{{client.pk}}">
+          <label class="control-label" for="action_{{client.pk}}">{% trans "Actions" %}</label>
+          <div class="controls">
+            <select id="action_{{client.pk}}_select" class="action_select">
+              <option value=''>---{% trans "Select action" %}---</option>
+              {%for action in client.actions.all%}
+                <option value={{action.pk}}>{{action.name}}</option>         
+              {%endfor%}
+            </select>
+          </div>
+        </div>
+      {%endfor%}
+
+      <div id="div_form" class="hide">
+          <a class="lead_create_guide" target="blank" href="/static/legaldocuments/Leads_guidelines.pdf">Guideline for creating Leads</a>
+        <legend>{% trans "API Input" %}</legend>
+        <div class="control-group">
+          <label class="control-label" for="form_access_key">{% trans "Access Key" %}</label>
+          <div class="controls">
+            <input type="text" id="form_access_key" name="access_key">
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" for="form_secret_key">{% trans "Secret Key" %}</label>
+          <div class="controls">
+            <input type="text" id="form_secret_key" name="access_secret">
+          </div>
+        </div>
+      
+        {%for fname, field in action_fields.items%}
+        
+        <!-- print field.type and find out API -->
+        <input type="hidden" id="_actiontype_{{fname}}" value="{{field.type}}" />
+        <div id="form_{{fname}}" class="hide action_form">
+        <!-- <input type="text" value="{{fname}}" />   -->
+       
+          {%if field.type == 'list'%}
+            {%for f in field.query_fields%}
+              <div class="control-group">
+                <label class="control-label" for="form_{{f}}_{{fname}}">{{f}}</label>
+                <div class="controls">
+                  {% if f == 'category' %}
+                    <select data-default="Drop Down" id="form_{{f}}_{{fname}}" name="{{f}}" class="inp_{{fname}} inp_form">
+                        <option value="">------------</option>
+                        {% for i in absent_list %}
+                        <option value="{{i.name}}">{% trans i.name %}</option>  
+                        {% endfor %}  
+                    </select>    
+                   {% else %}
+                     <input type="text" id="form_{{f}}_{{fname}}" name="{{f}}" class="inp_{{fname}} inp_form inp_form_clear">
+                    {% endif %} 
+                  
+                
+                  {%if f = 'date_from' or f = 'date_to'%}
+                    <div>Date Format: "yyyy-mm-dd"</div>
+                  {%endif%}
+                  
+                </div>
+              </div>
+            {%endfor%}
+
+            {%for f in field.extra_edit_fields%}
+              {% if fname == 'transactions-list' and f == 'transaction_type' %}
+                <div class="control-group">
+                  <label class="control-label" for="form_{{f}}_{{fname}}">{{f}}</label>
+                  <div class="controls">
+                      <select id="form_{{f}}_{{fname}}" name="{{f}}" class="inp_{{fname}} inp_form">
+                        <option value="">{% trans "Select" %}</option>
+                        <option value="order">{% trans "Order" %}</option>
+                        <option value="deposit">{% trans "Deposit" %}</option>
+                        <option value="payout">{% trans "Payout" %}</option>
+                        <option value="voucher">{% trans "Voucher" %}</option>
+                        <option value="invite">{% trans "Invite" %}</option>
+                        <option value="sales">{% trans "Sales" %}</option>
+                        <option value="commission">{% trans "Commission" %}</option>
+                        <option value="kickback">{% trans "Kickback" %}</option>
+                        <option value="signupbonus">{% trans "Signup bonus" %}</option>
+                        <option value="refund">{% trans "Refund" %}</option>
+                        <option value="credit">{% trans "Credit" %}</option>
+                        <option value="invoice">{% trans "Invoice" %}</option>
+                      </select>
+                  </div>
+                </div>
+              {%endif%}
+            {%endfor%}
+          
+            
+          
+            
+          {%endif%}
+          
+        </div>
+        {%endfor%}
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="btn_call">{% trans "Call API" %}</button>
+          <button type="button" class="btn">{% trans "Cancel" %}</button>
+        </div>
+      </div>
+
+    </form>
+    
+    {%else%}
+      <div class="alert alert-block">
+          <h4>{% trans "No Application" %}</h4>
+          {% trans "You don't have any applications" %}<br/><a class="btn btn-success" href="/apidocs/clients/">{% trans "Create A New Application" %}</a>
+      </div>
+    {%endif%}
+
+  </div>
+  <div class="span6">
+    <div class="hides" id="result">
+      <ul class="nav nav-tabs" id="myTab">
+        <li  class="active"><a href="#tab-result" data-toggle="tab">{% trans "Result" %}</a></li>
+        <li><a href="#tab-urldata" data-toggle="tab">{% trans "URL &amp; Data" %}</a></li>
+        <li><a href="#tab-jssample" data-toggle="tab">{% trans "Javascript Sample" %}</a></li>
+        <li><a href="#tab-curlsample" data-toggle="tab">{% trans "Curl Sample" %}</a></li>
+      </ul>
+       
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab-result">
+          <textarea id="result_text"></textarea>
+        </div>
+        <div class="tab-pane" id="tab-urldata">
+          <h5>URL:</h5>
+          <div class="well well-small"><span id="source_url_post"></span></div>
+          <h5>{% trans "Data" %}:</h5>
+          <textarea id="source_data"></textarea>
+        </div>
+        <div class="tab-pane" id="tab-jssample">
+          <textarea id="source_js"></textarea>
+        </div>
+        <div class="tab-pane" id="tab-curlsample">
+          <textarea id="source_curl"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%endblock%}
+{%block script%}
+<script>
+
+  var FX ={};
+  FX.context = {{json|safe}};
+  FX.current = {};
+  FX.codemirror_config = {
+    lineNumbers: true,
+    matchBrackets:true,
+    theme:'ambiance',
+    mode: "application/json",
+    tabSize:2,
+    readOnly:false,
+    autofocus:true
+  };
+
+  function get_client(cid){
+
+    for(var i in FX.context.clients){
+      var c = FX.context.clients[i];
+      if(c.id == cid){
+        return c;
+      }
+    }
+
+    return null;
+  }
+
+  function get_action(aid){
+    return FX.context.action_fields[aid];
+  }
+
+  function action_related_changes(){
+    $('#form_status_absentlist-list').attr('readonly', 'readonly');
+    $('#form_status_absentlist-list').val('test');
+
+   
+
+    $('#form_au_minimum_price_absentlist-list').attr('disabled', 'disabled');
+    
+    
+    
+    $('#form_page_absentlist-list').val(1);
+   
+   
+    
+    
+    if(FX.current.action.type == 'create'){
+       $('.lead_create_guide').show();
+      }
+      else{
+        $('.lead_create_guide').hide();
+      }
+  }
+
+  $(document).ready(function(){
+    FX.current['client'] = null;
+    FX.current['action'] = null;
+
+    
+    var result_text_editor = CodeMirror.fromTextArea(document.getElementById("result_text"), FX.codemirror_config);
+
+    FX.codemirror_config['mode'] = 'text/x-properties';
+    var source_data_editor = CodeMirror.fromTextArea(document.getElementById("source_data"), FX.codemirror_config);
+
+    FX.codemirror_config['mode'] = 'text/javascript';
+    var source_js_editor = CodeMirror.fromTextArea(document.getElementById("source_js"), FX.codemirror_config);
+
+    FX.codemirror_config['mode'] = 'text/x-sh';
+    var source_curl_editor = CodeMirror.fromTextArea(document.getElementById("source_curl"), FX.codemirror_config);
+
+
+    result_text_editor.setValue('');
+    source_data_editor.setValue('');
+    source_js_editor.setValue('');
+    source_curl_editor.setValue('');
+
+    $('#myTab li:eq(0) a').click(function (e) {
+      $(this).tab('show');
+      result_text_editor.refresh();
+    });
+
+    $('#myTab li:eq(1) a').click(function (e) {
+      $(this).tab('show');
+      source_data_editor.refresh();
+    });
+
+    $('#myTab li:eq(2) a').click(function (e) {
+      $(this).tab('show');
+      source_js_editor.refresh();
+    });
+
+    $('#myTab li:eq(3) a').click(function (e) {
+      $(this).tab('show');
+      source_curl_editor.refresh();
+    });
+    $('#applications').change(function(){
+       alert("test");
+      var val = $(this).val();
+      if(val != ''){
+        var client = get_client(parseInt(val));
+        FX.current['client'] = client;
+        if(client != null){
+          $('#form_access_key').val(client.access_key);
+          $('#form_secret_key').val(client.access_secret);
+          $('#form_access_key_absentlist-list').val(client.access_key);
+          $('#form_secret_key_absentlist-list').val(client.access_secret);
+        }
+        
+        $('.action_select_box').hide();
+        $('.action_form').hide();
+        $('#div_form').hide();
+        $('#action_'+val).show();
+      }else{
+        FX.current['client'] = null;
+        FX.current['action'] = null;
+      }
+      
+    });
+
+    $('.action_select').change(function(){
+
+      var val = $(this).val();
+      if(val != ''){
+        $('.inp_form').attr("disabled", "disabled");
+        $('.inp_form_clear').val('');
+
+        $('.action_form').hide();
+        FX.current['action'] = get_action(val);
+        $('#div_form').show();
+        $('#form_'+val).show();
+        $('.inp_'+val).removeAttr("disabled");
+      }else{
+        FX.current['action'] = null;
+      }
+
+      action_related_changes();
+    });
+
+    $('#api_form').submit(function(){
+      var data = $('#api_form').serialize();
+      
+
+      if(FX.current.action.type == 'list'){
+
+        //if (data['deal_starts'] == '' && data['deal_ends'] == '' && data['pre_sold'] == '' && data['description'] == '' && data['language'] == ''  && data['price_currency'] == '' && data['price'] == ''  && data['sale'] == '' && data['title'] == '' && data['generation_date'] == '' && data['category_id'] == '' && data['keywords'] == '' &&  data['consumer_first_name'] == '' && data['consumer_email'] == '' && data['consumer_phone_number'] == '' ){
+        //  alert('Enter all the mandatory fields');
+        //  return false
+        //}
+        var date = $('#form_date_absentlist-list').val()
+        
+        // var absent_regno = $('#form_absent_regno_absentlist-list').val()
+        // var absent_name = $('#form_absent_regno_absentlist-list').val()
+        
+        // if (date == '' && absent_regno == '' && absent_name == '') {
+          // alert('Enter all the mandatory fields')
+          // return false
+        // }
+        
+        if (date == '') {
+          alert('Enter all the mandatory fields')
+          return false
+        }
+        //else if (deal_starts == '') {
+        //  alert('Enter the deal starts')
+        //  return false
+        //}
+        //else if (deal_ends == '') {
+        //  alert('Enter the deal ends')
+        //  return false
+        //}
+        
+      }
+      
+      if(FX.current['client'] == null){
+        alert('Please select the application');
+        return false;
+      }
+
+      if(FX.current['action'] == null){
+        alert('Please select an action');
+        return false;
+      }
+
+      var data = $('#api_form').serialize();
+      alert(data);
+      var url = FX.current.action.action.action_path;
+      alert(url);
+
+      if(FX.current.action.type != 'list' && FX.current.action.type != 'create'){
+        var pk = $('[name=pk]:not(:disabled)').val();
+        if(pk == ''){
+          alert('ID can not be null');
+          return false;
+        }
+
+        if(isNaN(pk)){
+          alert('ID must be a number');
+          return false;
+
+        }
+        pk = $.trim(pk)
+        url += pk + '/';
+      }
+
+      $('#btn_call').attr('disabled', 'disabled');
+      $('#btn_call').html('Posting Data...');
+
+      var caller = $.post;
+      var form_action = 'post';
+      if(FX.current.action.type == 'list' || FX.current.action.type == 'get'){
+        caller = $.get;
+        
+        form_action = 'get';
+        
+        
+      }
+
+
+      caller(url, data, function(result){
+        alert(data);
+        alert("called caller");
+        alert(result);
+        var result_text = JSON.stringify(result, null, "\t");
+        alert(result_text);
+        var source_url = 'http://' + window.location.host + url;
+        alert(source_url);
+        var source_data = data.replace(/&/ig, '\n');
+        var source_url_post = ((form_action=='get')? 'GET ':'POST ') + url +" HTTP/1.1";
+
+        var source_curl = 'curl -X ' + ((form_action=='get')? 'GET ':'POST ') +
+        ' \\\n-d"' + data + '" \\\n' + source_url;
+        if (url == '/api/absentlist/list/') {
+          var source_curl = 'curl -X ' + ((form_action=='get')? 'POST ':'POST ') +
+        ' \\\n-d"' + data + '" \\\n' + source_url;
+        alert(source_curl);
+        }
+        var source_js = 'var url = "' + source_url +'";\n'+
+          'var data = "' + data + '";\n'+
+          ((form_action=='get')? '$.get':'$.post') + 
+
+          '(url, data, function(result){\n\tconsole.log(result);\n});'
+
+        result_text_editor.setValue(result_text);
+        source_data_editor.setValue(source_data);
+        source_js_editor.setValue(source_js);
+        source_curl_editor.setValue(source_curl);
+        alert(source_url_post);
+        $('#source_url_post').html(source_url_post);
+
+        $('#btn_call').removeAttr('disabled');
+        $('#btn_call').html('Call API');
+
+      }, 'json');
+      
+      return false;
+
+    });
+
+    $(document).ajaxError(function(e, xhr, settings, exception){
+      alert('Something went wrong ' + 'error in: ' + settings.url + ' \n'+'error:\n' + xhr.responseText);
+      $('#btn_call').removeAttr('disabled');
+      $('#btn_call').html('Call API');
+    });
+
+  });
+
+  $('#form_auction_leads-create').live('click', function(){
+    if ($(this).is(':checked')){
+      $('#form_au_minimum_price_leads-create').removeAttr('disabled');
+      $('#form_au_minutes_to_auction_start_leads-create').removeAttr('disabled');
+    }else{
+      $('#form_au_minimum_price_leads-create').attr('disabled', 'disabled');
+      $('#form_au_minutes_to_auction_start_leads-create').attr('disabled', 'disabled');
+    }
+  });
+  //var editor = CodeMirror.fromTextArea(document.getElementById("code"), );
+  //editor.autoFormatRange({line:0, ch:0}, {line:2, ch:0});
+
+</script>
+</div><!-- container -->
+{%endblock%}

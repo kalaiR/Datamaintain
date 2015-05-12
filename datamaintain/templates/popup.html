@@ -1,0 +1,673 @@
+{% load static from staticfiles %}
+
+{% block content %}
+
+{% if 'admin' not in request.path %}
+<!-- <div class="christmas_popup"> -->
+<!--     {# include "fixido/christmas_offer.html" #} -->
+<!-- </div> --><!-- remove this div after xmas-->
+<div class="popup_fade"></div><!--popup_fade-->
+{% for message in messages %}{% if message.tags == 'info' or message.tags == 'success' %}
+<div class="popup_fade" style="display: block;"></div><!--popup_fade-->
+<div class="activate_popup" id="email_activate">
+    <div class="popup_heading">
+        <a href="/" class="logo_{{request.LANGUAGE_CODE}}"></a>
+        <a href="javascript:void(0);"><code class="close_btn">
+        </code></a>
+        <div class="clear_both"></div>
+    </div><!--popup_heading-->
+    <div class="popup_contents email_confirmation_msg">
+        {% if message.tags == 'success' %}
+        <b>Thank you!</b>
+        {% endif %}
+        <h3 style="text-align: center;">{{ message|safe }}</h3>
+        <div class="clear_both"></div>
+        <a href="javascript:void(0);" onclick="javascript:$('.close_btn').click();" class="btn fr">OK</a>
+    </div>
+</div><!--activate_popup-->
+{% endif %}{% endfor %}
+{% endif %}
+
+{% if not user.is_authenticated %}
+    <div class="forgotpassword_popup" >
+        <div class="popup_heading">
+            <a href="#" class="logo_{{request.LANGUAGE_CODE}}"></a>
+            <code class="close_btn">
+            </code>
+            <div class="clear_both"></div>
+        </div><!--popup_heading-->
+        <div class="popup_contents">
+
+            <iframe src="{% url password_reset %}" height= "200" width="326" scrolling="no" frameBorder="0" style="border:none;"></iframe>
+
+        </div><!--popup_contents-->
+        <div class="clear_both"></div>
+    </div><!--forgotpassword_popup-->
+
+    <div class="signup_popup popup_pos" id="joinus_popup_content">
+        <div class="popup_heading">
+            <a href="#" class="logo_{{request.LANGUAGE_CODE}}"></a>
+            <div class="fr">
+                <span class="close_btn"></span>
+                <!-- <a href="#" class="linkedin_signup"></a> -->
+            </div>
+            <div class="clear_both"></div>
+        </div><!--popup_heading-->
+        <div class="popup_contents">
+            <form action="{% url createNewUser %}"  id="popup_joinus_form" method="post" enctype="multipart/form-data" class="join_form">
+                {% csrf_token %}
+                <div class="label_holder">
+                    <label class="infield_p" for="fname_p">Name</label>
+                    <div class="clear_both"></div>
+                    <input type="text" name="fname" id="fname_p" value="" placeholder="" class="form_inputfileds alph_validation" maxlength='30' />
+                </div>
+    
+                <div class="label_holder">
+                    <label class="infield_p" for="company_name_p">Company</label>
+                    <div class="clear_both"></div>
+                    <input type="text" value="" placeholder="" name="company_name" id="company_name_p" class="form_inputfileds alph_validation" maxlength='256' />
+                </div>
+    
+                <div>
+                    <label class="" id='state_p' style="color:red !important"></label>
+                    {% if errors.email_exists %}
+                    {{ errors.email_exists }}
+                    {% endif %}
+                    <div class="label_holder">
+                        <label class="infield_p" for="email_p">Email</label>
+                        <input type="text" id="email_p" placeholder="" name="email" class="form_inputfileds email_input_act" value="" onchange="sndReq(this.value);" maxlength='75' />
+                    </div>
+                </div>
+    
+                <div class="label_holder">
+                    <label class="infield_p" for="phone_number_p">Phone number</label>
+                    <input type="text" value="" placeholder="" name="phone_number" id="phone_number_p" class="form_inputfileds "  maxlength='32' />
+                </div>
+    
+                <div class="terms_services termsofservice_act" >
+                    <span>By signing up, you accept our </span>
+    
+                    <a href="javascript:void(0);" >Terms of service</a>
+                </div><!-- terms_services -->
+                <input type="submit" name="{%if '/apidocs/' in request.path %}fxapi_registration{% else %}auto_buy_popup_reg{% endif %}"  class="btn signup_btn  banner_signup_form_send_p" data-emailexist ="true" value="Join us">
+                <input type="hidden" id="selected_lead2" value="{{lead.id}}" name="selected_lead2">
+                <input type="hidden" id='register_path_lead' value="{{request.path}}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}" name="next" />
+                <div class="clear_both"></div>
+            </form>
+        </div><!--popup_contents-->
+    
+        <div class="popup_footers">
+            <span>Already registered?</span>
+            <a href="javascript:void(0);" class="signin_alert1">Sign in
+            	</a>
+        </div><!--popup_footers-->
+        <div class="clear_both"></div>
+    </div><!--signup_popup-->
+    
+    {% if request.REQUEST.lr %}
+    <div class="popup_fade" style="display: block;"></div><!--popup_fade-->
+    <div class="signup_popup popup_pos" id="signin_popup1" style="display: block;">
+    {%else%}
+    <div class="signup_popup popup_pos" id="signin_popup1">
+    {% endif %}
+        <div class="popup_heading">
+            <a href="#" class="logo_{{request.LANGUAGE_CODE}}"></a>
+            <div class="fr">
+                <span class="close_btn"></span>
+                <!-- <a href="#" class="linkedin_signup"></a> -->
+            </div>
+            <div class="clear_both"></div>
+        </div><!--popup_heading-->
+        <div class="popup_contents">
+            <form method="post" action="{% url login_view %}" id="fixido_login_buy">
+                {% csrf_token %}
+                <input type="text" class="text_val_act" value="{% if fx_cookies %}{{fx_cookies}}{% else %}Email{% endif %}" name="auth_name" maxlength='75' />
+                <input type="password" class="text_val_act" placeholder="Password" value="" name="auth_paw"/>
+    
+                {% if request.REQUEST.lr %}
+                {% for message in messages %}
+                <span class="error_msg">{{ message }}</span>
+                {% endfor %}
+                {% endif %}
+                
+                <div class="btns">
+                    <div class="fl">
+                        <input type="hidden" name="selected_lead2" id="selected_lead2" value="{{ lead.id }}" />
+                        <input type="hidden" value="{{request.path}}{% if request.REQUEST.q %}?q={{ request.REQUEST.q }}{% endif %}" name="next" id="request_path_lead" />
+                        <a id="forgotpassword_act" class="underline forgotpassword">Forgot your password?</a>
+                    </div>
+                    <input type="submit" name="home_buy_login" class="btn fr" value="Sign in"/>
+                    <div class="clear_both"></div>
+                </div>
+            </form>
+        </div><!--popup_contents-->
+    
+        <div class="popup_footers">
+            <a href="javascript:void(0);" id="joinus_popup_window1">Join us now for free</a>
+        </div><!--popup_footers-->
+        <div class="clear_both"></div>
+    </div><!--signup_popup-->
+    
+    {% if error_message %}
+    <div class="popup_fade" style="display: block;"></div><!--popup_fade-->
+    <div class="signup_popup popup_pos" id="signin_popup" style="display: block;">
+    {%else%}
+    <div class="signup_popup popup_pos" id="signin_popup">
+    {% endif %}
+        <div class="popup_heading">
+            <a href="#" class="logo_{{request.LANGUAGE_CODE}}"></a>
+            <div class="fr">
+                <span class="close_btn"></span>
+                <!-- <a href="#" class="linkedin_signup"></a> -->
+            </div>
+            <div class="clear_both"></div>
+        </div><!--popup_heading-->
+        <div class="popup_contents">
+            <form method="post" action="{% url login_view %}">
+                {% csrf_token %}
+                <input type="text" class="text_val_act" value="{% if fx_cookies %}{{fx_cookies}}{% else %}Email{% endif %}" name="auth_name" maxlength='75' />
+                <input type="password" class="text_val_act" placeholder="Password" value="" name="auth_paw"/>
+    
+                {% if error_message %}
+                {% for message in messages %}
+                <span class="error_msg">{{ message }}</span>
+                {% endfor %}
+                {% endif %}
+                
+                <div class="btns">
+                    <div class="fl">
+                        <input type="hidden" value="{{request.path}}{% if request.REQUEST.q %}?q={{ request.REQUEST.q }}{% endif %}" name="next" />
+                        <input type="hidden" name="selected_lead2" id="selected_lead2" value="{% if error_messagee %}{{ request.GET.ld }}{%else%}{{ lead.id }}{% endif %}" />
+                        <a id="forgotpassword_act" class='forgotpassword'>Forgot your password?</a>
+                    </div>
+                    <input type="submit" {% if error_messagee %}name="home_buy_login"{% endif %} class="btn fr" value="Sign in" />
+                    <div class="clear_both"></div>
+    
+                </div>
+            </form>
+        </div><!--popup_contents-->
+    
+        <div class="popup_footers">
+            <a href="javascript:void(0);" id="joinus_popup_window1">Join us now for free</a>
+        </div><!--popup_footers-->
+        <div class="clear_both"></div>
+    </div><!--signup_popup-->
+    
+    {% if request.REQUEST.ler %}
+    <div class="popup_fade" style="display: block;"></div><!--popup_fade-->
+    <div class="signup_popup popup_pos" id="directbuy_signin_popup" style="display: block;">
+    {% else %}
+    <div class="signup_popup popup_pos" id="directbuy_signin_popup" >
+    {% endif %}
+        <div class="popup_heading">
+            <a href="#" class="logo_{{request.LANGUAGE_CODE}}"></a>
+            <div class="fr">
+                <span class="close_btn"></span>
+                <!-- <a href="#" class="linkedin_signup"></a> -->
+            </div>
+            <div class="clear_both"></div>
+        </div><!--popup_heading-->
+        <div class="popup_contents">
+            <form method="post" action="{% url auto_buy %}">
+                {% csrf_token %}
+                <input type="text" class="text_val_act" value="{% if fx_cookies %}{{fx_cookies}}{% else %}Email{% endif %}" name="auth_name" maxlength='75' />
+                <input type="password" class="text_val_act" placeholder="Password" value="" name="auth_paw"/>
+    
+                {% if request.REQUEST.ler %}
+                {% for message in messages %}
+                <span class="error_msg">{{ message }}</span>
+                {% endfor %}
+                {% endif %}
+                
+                <div class="btns">
+                    <div class="fl">
+                        <input type="hidden" id="redirect_path_lead" value="{{request.path}}{% if request.REQUEST.q %}?q={{ request.REQUEST.q }}{% endif %}" name="next" />
+                        <input type="hidden" id="selected_leadbuy" value="{{ lead.id }}" name="item" />
+                        <input type="hidden" name="selected_lead2" id="selected_lead2" value="{{ lead.id }}" />
+                        <a id="forgotpassword_act" class="udrln-pntr forgotpassword">Forgot your password?</a>
+                    </div>
+                    <button name="btn_auto_buy" type="submit" class="btn fr" value="{{ lead.id }}" >
+                        Buy now
+                    </button>
+                    <div class="clear_both"></div>
+    
+                </div>
+            </form>
+        </div><!--popup_contents-->
+    
+        <div class="popup_footers">
+            <a href="javascript:void(0);" id="joinus_popup_window1">Join us now for free</a>
+        </div><!--popup_footers-->
+        <div class="clear_both"></div>
+    </div><!--signup_popup-->
+{% else %}
+    {% if generated_url %}
+    <div class="forgotpassword_popup genrated_url_popup" style="display: block;">
+        <div class="popup_heading">
+            <a href="#" class="logo_{{request.LANGUAGE_CODE}}"></a>
+            <code class="close_btn">
+            </code>
+            <div class="clear_both"></div>
+        </div><!--popup_heading-->
+        <div class="popup_contents">
+            <textarea>{{current_site}}{{generated_url}}</textarea>
+        </div><!--popup_contents-->
+        <div class="clear_both"></div>
+    </div><!--forgotpassword_popup-->
+    {% endif %}
+    {% if 'apidocs' not in request.path and 'admin' not in request.path %}
+    <div class="pop_up export_popup">
+        <div class="heading">
+            Export
+        </div><!--heading-->
+        <div class="content content_middle">
+            <label class="fl">
+            Choose your format
+
+            </label>
+            <div class="custom_select fl">
+                <div class="select">
+                    <p class="country">
+                        CSV
+                    </p>
+                    <code class="custom_drop_nav">
+                    </code>
+                </div><!-- select -->
+                <select name="Drop down" data-default="Drop Down" class="custom_select_value_act">
+                    <option value="{% url export_csv %}">CSV</option>
+                    <option value="{% url export_pdf %}">PDF</option>
+                    <!--<option value="option 2">DOC</option>-->
+                </select>
+            </div><!--custom_select-->
+            <div class="clear_both"></div>
+        </div><!--content-->
+        <div class="popup_footer">
+            <form class="fr" id="action_url" action="{% url export_csv %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="select_lead_pdf" value="{{ lead.id }}" id="pick_lead_id" />
+                <input type="submit" class="btn popup_cancel_btn" value="Export" />
+            </form>
+            <input type="reset" class="btn fr popup_cancel_btn" value="Cancel" />
+            <div class="clear_both"></div>
+        </div><!--footer-->
+    </div><!--export_popup-->
+
+    <div class="pop_up change_status_popup">
+        <form method="post" id="change_status"  name="status_lead" action="{% url leadStatus %}">
+            {% csrf_token %}
+            <input type="hidden" value="" name="checklist" id="prov_status" />
+            <div class="heading">
+                Change your status
+            </div><!--heading-->
+            <div class="content content_middle">
+                <label class="fl">Change your status</label>
+                <div class="custom_select fl">
+                    <div class="select">
+                        <p class="country">
+                            Active
+                        </p>
+                        <code class="custom_drop_nav">
+                        </code>
+                    </div><!-- select -->
+                    <select name="ddl_status" data-default="Drop Down" class="custom_select_value_act">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div><!--custom_select-->
+                <div class="clear_both"></div>
+            </div><!--content-->
+            <div class="popup_footer">
+                <input type="hidden" name="thispage" value="{{ request.get_full_path }}" />
+                <input type="submit" class="btn fr" value="Ok" />
+                <input type="reset" class="btn fr popup_cancel_btn" value="Cancel" />
+                <div class="clear_both"></div>
+            </div><!--footer-->
+        </form>
+    </div><!--change_status_popup-->
+    {% endif %}
+{% endif %}
+
+{% if user.is_authenticated %}
+{% if request.REQUEST.lowbalance or request.REQUEST.deposit or request.REQUEST.transactionfail %}
+<div class="popup_fade" style="display: block;"></div><!--popup_fade-->
+<div class="deposit_popup {% if request.REQUEST.deposit %}deposit_popup_small{% endif %} paypal_deposit_act" style="display: block;">
+    <div class="popup_header_{{request.LANGUAGE_CODE}} {% if not request.REQUEST.deposit %}depsoit_popup_header_{{request.LANGUAGE_CODE}}{% endif %}">
+        {% if not request.REQUEST.deposit %}
+        {% trans "You need to deposit money in your Fixido account to buy more leads" %}.
+        {% endif %}
+        <code class="close_btn"></code>
+    </div><!--popup_header_{{request.LANGUAGE_CODE}}-->
+    {% if request.REQUEST.deposit %}
+    <div class="account_general_header">
+        <h2>{% trans "Deposit" %} {% trans "OK" %}</h2>
+        <span>{% trans "Your amount has been deposited into the account" %}.</span>
+    </div><!-- account_general_header -->
+    <div class="popup_footer">
+        <input type="reset" class="btn fr cancel_btn" value="{% trans "Close" %}" />
+        <div class="clear_both"></div>
+    </div>
+    
+    {% elif request.REQUEST.lowbalance or request.REQUEST.transactionfail %}
+    <div class="popup_content">
+        <div class="payout_information">
+           {% if '/dashboard' not in request.path %}
+           <script src="{% static "js/account.js" %}?version={{version}}"></script>
+           {% endif %}
+            <div class="deposit_left_col fl">
+                <div id="deposit_popup_container">
+                    <ul class='etabs'>
+                        <li class='tab tab_first'><a href="#creditcard"><i class="fa fa-credit-card"> </i> &nbsp;&nbsp;&nbsp;{% trans "Credit card, Direct" %}<i class="fa fa-chevron-right"> </i></a></li>
+                        <li class='tab'><a href="#bankaccount"><i class="fa fa-building-o"> </i> &nbsp;&nbsp;&nbsp;{% trans "Bank payment, 2 days" %}<i class="fa fa-chevron-right"> </i></a></li>
+                        <li class='tab'><a href="#deposit_invoice"><i class="fa fa-clipboard"> </i> &nbsp;&nbsp;&nbsp;{% trans "Invoice customer" %}{% if not actor_invoice %}, {% trans "Apply" %}{% endif %}<i class="fa fa-chevron-right"> </i></a></li>
+                    </ul>
+                    <div class="deposit_right_col">
+                        <div id="creditcard">
+                            {% if request.REQUEST.transactionfail %}
+                                <h2>{% trans "Sorry" %}</h2>
+                                <span>{% trans "There seems to be a problem with your payment. Please try again" %}.</span>
+                            {% else %}
+                                <span>{% trans "You can use PayPal to deposit money on your Fixido account" %}.</span>
+                                <p>
+                                {% trans "You can use any creditcard with PayPal. Its totally secure and free to use" %}. {% trans "If you have any questions, Please call us and we will guide you" %}.
+                                </p>
+                                <div>
+                                {% if success_msg %}
+                                    <h3 style="color: red; margin:0px 0px 0px 30px;">{{ success_msg }}</h3>
+                                {% endif %}
+                                </div>
+                            {% endif %}
+                            <div class="payment_block">
+                            
+                                <h3>{% trans "Payment information" %}</h3>
+                                {% if request.REQUEST.transactionfail != 'error' %}
+                                <div class='depo-hint'>
+                                    {% trans "You have to deposit minimum" %} 
+                                    <b>
+                                        {% if request.REQUEST.lowbalance %}
+                                        {{ request.REQUEST.lowbalance|format_price:ACTOR_CURRENCY }} 
+                                        {% elif request.REQUEST.transactionfail %}
+                                        {{ request.REQUEST.transactionfail|format_price:ACTOR_CURRENCY }} 
+                                        {% endif %}
+                                        {{ ACTOR_CURRENCY }}</b>
+                                    {% trans "to buy this lead" %}
+                                    {% if lead %}
+                                    ({% trans "Price" %} 
+                                    {{lead|format_price_as:ACTOR_CURRENCY}}{% if vat_applicable %} + {% trans "VAT" %}{% endif %})
+                                    {% elif request.REQUEST.leadid %}
+                                    ({% trans "Price" %}
+                                    {{ request.REQUEST.leadid|leadobj|format_price_as:ACTOR_CURRENCY }}{% if vat_applicable %} + {% trans "VAT" %}{% endif %})
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                                <form action="{{paypalurl}}" method="post" id="payment_details">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="cmd" value="_xclick">
+                                    <input type="hidden" name="business" value="{{paypalemail}}">
+                                    <input type="hidden" name="rm" value="2"/>
+                                    <input type="hidden" name="lc" value="{% if request.LANGUAGE_CODE == 'sv' %}SE{% elif request.LANGUAGE_CODE == 'de' %}DE{% elif request.LANGUAGE_CODE == 'en' %}US{% endif %}" />
+                                    <input type="hidden" name="charset" value="utf-8" id="id_charset">
+                                    <input type="hidden" name="currency_code" value="{{ACTOR_CURRENCY}}" id="id_currency_code">
+                                    <input type="hidden" name="no_shipping" value="1" id="id_no_shipping">
+                                    <input type="hidden" name="item_name" value="Fixido Deposit">
+                                    <input type="hidden" name="custom" value="{{actor.id}}"/>
+                                    <input type="hidden" class="fl large" name="first_name" value="{{actor.first_name}}" >
+                                    <input type="hidden" name="last_name" value="{{actor.last_name}}"/>
+                                    <input type="hidden" name="cancel_return" 
+                                    value="{{current_site}}{% if '/campaign/email/result/' in request.path and request.REQUEST.lowbalance %}/leads/{% if lead %}{{ lead.id }}{% else %}{{ request.REQUEST.leadid }}{% endif %}/{% else %}{{request.path}}{% endif %}?transactionfail={{ request.REQUEST.lowbalance }}&leadid={% if lead %}{{ lead.id }}{% else %}{{ request.REQUEST.leadid }}{% endif %}"/>
+                                    <input type="hidden" name="return" 
+                                    value="{{current_site}}{% url returnDeposit %}?deposit=1&{% if request.REQUEST.q %}q={{ request.REQUEST.q }}&{% endif %}leadid={% if lead %}{{ lead.id }}{% else %}{{ request.REQUEST.leadid }}{% endif %}&path={% if '/campaign/email/result/' in request.path and request.REQUEST.lowbalance %}/leads/{% if lead %}{{ lead.id }}{% else %}{{ request.REQUEST.leadid }}{% endif %}/{% else %}{{request.path}}{% endif %}">
+                                    <input type="hidden" name="notify_url" id="id_notify_url" value="{{current_site}}/show_me_the_money/"/>
+                                    <div class="clear_both"></div>
+                                    
+                                    <label class="fl"><i>{% trans "Current account balance" %}</i></label>
+                                    <div class="fl get_datas current_account_balance" id="cur_bal_pop">
+                                        {{ accountdetails.balance|format_price:ACTOR_CURRENCY}}
+                                    </div>
+                                    <label class="fl eur">{{ACTOR_CURRENCY}}</label>
+                                    <div class="clear_both"> </div>
+                                    
+                                    <label class="fl"><b>{% trans "Deposit amount" %}</b></label>
+                                    <input type="text" class="fl small" name="amount" value="" id="id_amount_pop" maxlength='13' />
+                                    <label class="fl eur">{{ACTOR_CURRENCY}}</label>
+                                    <div class="clear_both"> </div>
+                                    
+                                    {% if signupbonus == 0 and signup_bonus_applicable %}
+                                    <div id="signupbonus_wrapper">
+                                    <label class="fl"><i>{% trans "Sign-up bonus" %} <b class='fgray'>{% trans "* Right now up to 5000"%}kr</b></i></label>
+                                    <div class="disabledinput fl get_datas" id="signup_bonus_pop"> </div>
+                                    <label class="fl eur">{{ACTOR_CURRENCY}}</label>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="clear_both"> </div>
+                                    <label class="fl"><i>{% trans "Your balance after deposit" %}</i></label>
+                                    <div class="disabledinput fl get_datas" id="balance_after_deposit_pop"> </div>
+                                    <label class="fl eur">{{ACTOR_CURRENCY}}</label>
+                                    <div class="clear_both"> </div>
+                                    
+                                    <i class="deposit_note">{% trans "After clicking 'Deposit' you will be redirected to PayPal where you" %}
+                                    {% trans "continue the deposit process and then come back to Fixido" %}. </i><!-- deposit_note -->
+                                    <div class="fl">
+                                    <code class="paypal_{{request.LANGUAGE_CODE}}">
+                                    </code>
+                                    </div>
+                                    <input type="submit"  class="paypal_btn btn fr" name="submit" value="{% trans 'Deposit' %}" alt="Fixido Deposit">
+                                    <div class="clear_both"> </div>
+                                </form>
+                                <div class="clear_both"> </div>
+                            
+                            </div><!-- payment_block -->
+                            
+                            <div class="signup_bonus_text">
+                                {% if signupbonus == 0 and signup_bonus_applicable %}
+                                <p>
+                                    <b>{% trans "*Right now we double your first deposit up to 5000" %} kr!</b>
+                                    {% trans "You must use it before 3 month or it will expire and you can" %}
+                                    {% trans "never claim to payout the bonus in cash" %}.
+                                </p>
+                                {% endif %}
+                            </div><!-- signup_bonus_text -->
+                            
+                        </div><!-- creditcard -->
+                        
+                        <div id="bankaccount">
+                    
+                            <div class="account_general_header">
+                                <span>{% trans "You can use Bank Payment to transfer money to your Fixido account" %}.</span>
+                                <p>{% trans "You need to mark the payment with your username (same as your email address) See below for all your info" %}.</p>
+                                <p>{% trans "The money that you transfer will be on your Fixido account within 2 business days after you transfer" %}.</p>
+                                 
+                                <div class="clear_both"> </div>
+                                
+                            </div><!-- account_general_header -->                           
+                            
+                            <div class="payment_block">
+                                <h3>{% trans "Payment information" %}</h3>              
+                                    <label class="fl">{% trans "Your username" %}:</label>
+                                    <div class="fl get_datas current_account_balance">{{ actor.email }}</div>
+                                    <div class="clear_both"> </div>
+                                    
+                                    <label class="fl">{% trans "Fixido bank account" %}:</label>        
+                                    <div class="fl get_datas">855-1707</div>
+                                    <div class="clear_both"> </div> 
+                                    <div class="bank_logo"> </div><!-- bank_logo -->    
+                            </div><!-- payment_block -->
+                            
+                            <div class="signup_bonus_text">
+                                {% if signupbonus == 0 and signup_bonus_applicable %}
+                                <p>
+                                    <b>{% trans "*Right now we double your first deposit up to 5000" %} kr!</b>
+                                    {% trans "You must use it before 3 month or it will expire and you can" %}
+                                    {% trans "never claim to payout the bonus in cash" %}.
+                                </p>
+                                {% endif %}
+                            </div><!-- signup_bonus_text -->
+                        
+                        </div><!-- bankaccount -->  
+                        
+                        <div id="deposit_invoice" class="deposit_invoice">
+                        {% if actor_invoice.invoice_status == 'A' %}
+                            <div class="invoice_submit">
+                            <h3>{% trans "Thanks your request has been submitted successfully" %}</h3>
+                            <span>{% trans "We will get in touch with you as soon as possible" %}</span>
+                            </div>
+                        {% elif actor_invoice.invoice_status == 'O' %}
+                            <div class="account_invoice invoice_center">
+                                <i class="fa fa-clipboard"> </i><br>
+                                <i class="fa fa-check-circle"></i> {% trans "Invoice approved, your credit limit" %}
+                            </div>
+                            <div class="account_invoice invoice_center">
+                                <div class="credit-limit">
+                                    <b>{{ actor_invoice.invoice_limit|format_price:ACTOR_CURRENCY}}</b> {{ACTOR_CURRENCY}}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="account_invoice invoice_center"><i class="fa fa-clipboard"> </i></div>
+                            <h3>{% trans "You can apply to become an Invoice customer" %}.</h3>
+                            <p>{% trans "We will send a monthly invoice of your orders. We allow for 10 days payment period" %}.<br>
+                               {% trans "If you like to apply, to become Invoice customer please" %} 
+                               <a href="/dashboard/deposit/#invoice">{% trans "click here" %}.</a></p>
+                        {% endif %}
+                        </div><!-- deposit_invoice -->      
+                    </div><!-- deposit_right_col-->         
+                </div><!-- deposit_popup_container -->
+                <h3 class='fixido_guarantee_popup_hdr'>{% trans "The Fixido guarantee" %}:</h3>
+                <div class="fixido_guarantee_popup">
+                        
+                    <ul>
+                        <li>
+                            {% trans "No monthly fee" %}
+                        </li>
+                        <li>
+                            {% trans "No extra charge" %}
+                        </li>
+                        <li>
+                            {% trans "No hidden costs" %}
+                        </li>
+                        <!--<li>
+                            {% trans "The money stay on your Fixido account until you use them" %}
+                        </li>-->
+                    </ul>
+                   
+                </div><!-- fixido_guarantee_popup -->
+                <div class="callus_block ">
+                    <div class="call_us_holder">
+                        <div class="contact_no_block">
+                            <span>{% trans "Questions" %}? {% trans "Feel free to call us" %} </span>
+                            <h3><b>{% trans "+ 46 (0)8 551 194 10" %}</b></h3>
+                        </div><!-- contact_no_block -->
+                        <div class="clear_both"> </div>
+                    </div><!-- call_us_holder -->
+                </div><!-- callus_block -->
+        
+            </div><!-- deposit_left_col -->
+            <div class="clear_both"> </div>
+                
+        </div><!-- payout_information -->
+        <div class="clear_both"> </div>
+
+    </div><!--popup_content-->
+    <div class="clear_both"></div>
+    {% endif %}
+</div><!--deposit_popup-->
+{% endif %}
+{% endif %}
+
+<div id="auction_popup" class="auction_popup popup_pos1" style="display:none">
+	<div class="placed_bid" id="placed_bid_title">
+		{% trans "Bid has been successfully submitted" %}
+	</div>
+	<div class="auction_popup_contents1">
+		<span class="placed_bid_icon"> </span>
+		<h6>{% trans "Bid amount" %}: <b><span class="bid_input_value">0</span> <span class="bid_input_currency">{{ACTOR_CURRENCY}}</span></b></h6>
+		<p>
+			{% trans "We will inform you about the result by e-mail when the auction ends in" %} <span class="alarm_txt">0 {% trans "minutes" %}</span>
+		</p>
+	</div>
+	<div class="auction_popup_contents2">
+		<div class="centered_content">
+		<h6> {% trans "Make this bid as your permanent bid on all future matching leads" %} </h6>
+		<div class="subscribe_part">
+			<span class="arrow_subscribe"> </span>
+			<form method="get" action='{% url create_subscription %}'>
+				<button class="btn" type="submit">{% trans "Start subscription" %}</button>
+			</form>
+			<a class="help_icon_subscribe" href="{% url auction_help %}" > </a>
+		</div>
+		<div class="clear_both"> </div>
+		</div>
+		<p> {% trans "You will always be notified by email when a new bid is placed" %} </p>
+	</div>
+	<span class="close_btn"></span>
+</div><!--auction_popup-->
+
+<div id="ask_question_popup" class="ask_question_popup popup_pos" style="display:none">
+	<div class="ask_ques_title">
+		{% trans "Ask your question" %}
+	</div>
+	<div class="ask_question_popup_contents1">
+		<p class="lead_title_ask">
+			{{lead.title|truncatechars:40}}
+		</p>
+		<span class="lead_id_popup"><b>{% trans "Lead id" %}:</b> {{lead.id}}</span>
+
+		<form class="ask_ques_form" id="question_form" method="post" >
+                                {% csrf_token %}
+			<textarea rows="4" name ="question" cols="50" placeholder="{% trans "Type your question here" %}" id="q_question" value=""></textarea>
+			<div class="email_input_wrap">
+			<span class="email_info fl"> </span>
+                                {% if user.is_authenticated %}
+			<input class="" type="text" name="email" id="q_email" value="{{user.email}}" readonly/>	
+			{% else %}
+                                <input class="" type="text" name="email" id="q_email" value=""/>	    
+                                {% endif %}    
+                                </div>
+			<div class="phone_input_wrap">					
+			<span class="phone_info"> </span>
+			<input class="" type="text" name="phone_no" id="q_phone_no" value=""/>
+			</div>
+			<p class="fl">
+				{% trans "We need your email or phone number to get back to you with the reply" %}.
+			</p>
+			<input id="thank_you_popup_act" type="button" value="{% trans "Ask" %}" class="btn fr" />
+			<div class="clear_both"> </div>
+                                <input type="hidden" name="lead_id" id="hidden_lead_id" value={{lead.id}} />
+                                {% if user.is_authenticated %}
+                                <input type="hidden" name="actor_id" value="{{user.email}}" />
+                                {% endif %}
+		</form>
+	</div>
+	<span class="close_btn"></span>
+</div>
+
+<div id="thank_you_popup" class="ask_question_popup popup_pos" style="display:none">
+	<div class="ask_ques_title">
+		{% trans "Thank you" %}
+	</div>
+	<div class="ask_question_popup_contents1">
+		<p class="success_txt">
+			<span class="success_icon"> </span>{% trans "Your question has been submitted" %}.
+		</p>
+		<p>								
+		{% trans "We will try to find the answer and contact you as soon as possible. If it is urgent you can also give us a call directly at" %} <b>{% trans "+ 46 (0)8 551 194 10" %}</b>.
+		</p>
+		
+	</div>
+	<span class="close_btn"></span>
+</div>
+
+<div class="terms_services_popup terms_popup_pos" style="display:none">
+    <div class="popup_heading">
+        <a href="#" class="logo_{{request.LANGUAGE_CODE}}"></a>
+        <code class="close_btn">
+        </code>
+        <div class="clear_both"></div>
+    </div><!--popup_heading-->
+    <div class="popup_contents">
+        {% include "fixido/terms_services_short.html" %}
+    </div><!--popup_contents-->
+    <div class="popup_footers"> </div><!--popup_footers-->
+    <div class="clear_both"> </div>
+</div><!--terms_services_popup-->
+
+{% endblock %}

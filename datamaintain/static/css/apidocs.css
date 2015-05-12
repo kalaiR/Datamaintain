@@ -1,0 +1,153 @@
+.label_holder{ position:relative }
+.label_holder label  { 
+	position:absolute; 
+	top:15px; 
+	left:62px;
+	color: #555;
+	font-size:26px;
+	z-index:999;
+}
+.form_inputfileds {
+	border:1px solid;
+	border-color:#c0c0c0 #d9d9d9 #d9d9d9 #d9d9d9 !important;
+	-webkit-border-radius: 0px !important;
+    -moz-border-radius: 0px !important;
+    border-radius: 0px !important;
+    width:273px !important;    height:22px !important;
+}
+.terms_services {
+	margin:18px 0px 0px 0px;
+}
+.terms_services span, .terms_services a {
+	font-family:Helvetica;	font-size:12px;	color:#000;	font-weight:normal; padding:0px 0px 0px 2px;
+	display:block;
+	text-align:center;
+}
+.terms_services a {
+	color:#559fd9 !important;
+	cursor:pointer;
+	padding:0px !important;
+	text-decoration:underline;
+}
+.terms_services a:hover { text-decoration:none; }
+.signup_btn { background:#559fd9 !important; padding:4px 0px; margin:13px 0px 0px 2px !important; width:285px !important; height:auto !important; font-family:Arial; font-size: 21px !important; }
+.joinus_popup .signup_btn { padding:2px 15px;	margin:0px 0px 0px 0px; width:auto !important; height:auto !important; }
+.joinus_popup_form input.signup_btn {
+	font-size: 16px;
+	padding: 0px 10px;
+	border-radius: 2px;
+	height:24px !important;
+}
+.popup_contents label {
+	font-family:Arial !important;	font-size:14px !important;
+	color:#000 !important;
+	left:9px !important;
+	top:8px !important;	
+}
+.popup_content {
+	padding:9px 14px 9px;
+	border-bottom:1px solid #dadada;
+   -webkit-box-shadow: 0px 5px 5px rgba(0,0,0,0.08);
+    -moz-box-shadow: 0px 5px 5px rgba(0,0,0,0.08);
+    box-shadow: 0px 5px 5px rgba(0,0,0,0.08);
+}
+.popup_content .row1 {
+	background: url(../img/popup_divider.png?version=2.4.0) no-repeat center bottom;
+	padding: 0px 0px 33px;	margin: 9px 0px 16px;
+}
+.popup_content .last {
+	background:none;
+	margin:0px; padding:5px 0 10px;
+}
+.popup_content .row1 input { margin: 0px 0px 0px 24px; }
+.popup_content .no {
+	width:15px; line-height:14px;
+	margin:0px 8px 0px 0px;
+	text-align:center;
+	color: #fff;
+	font-family:Arial; font-size:14px; font-weight: bold;
+	background:#4b576e; display:block;
+	border: 1px solid #5c677b; border-width:1px 0px;	
+}
+.popup_content label {	color:#000; font-size:14px; }
+.popup_content  .last label{ width:372px; } 
+.popup_footer {	padding:14px 0px 17px 0px; }
+.popup_footer input[type="reset"] {	margin:0px 18px 0px 8px; }
+.popup_content .row1 li { padding:0px 0px 8px; }
+.popup_content .row1 ul { margin:0px 0px 0px 23px; padding:0px; }
+.popup_content .row1 li.last { padding:0px; }
+.popup_content .row1 li label, .payout_popup .popup_content .row2 li label {
+	width:72px; color:#000; font-weight:bold;
+	line-height: 26px;
+}
+.payout_popup .popup_content .row1 { padding:0px 0px 18px; }
+.payout_popup .popup_content .row2 li label { width:142px; line-height:24px; }
+.payout_popup .popup_content .row2 li span { color:#000; font-weight:bold; line-height:24px; width:87px; padding-right:9px; }
+.payout_popup .popup_content .row2 li input { width:73px; height:16px; margin:0px 13px 0px 0px; }
+.deposit_popup .row1 { padding:0px 0px 17px; }
+.deposit_popup .row1 li { padding:0px;}
+.deposit_popup .row1 li span, .deposit_popup .row1 li label { line-height:21px; }
+.deposit_popup .row2 label { width:373px; }
+.signup_popup, .forgotpassword_popup {
+	width:360px; padding:13px 0px;
+	display:none;
+}
+.popup_heading {
+	padding:0px 17px 30px;
+	height:48px;
+}
+.forgotpassword_popup .popup_heading {
+	padding:0px 17px 0px !important;
+}
+.popup_heading span {
+	font-size:12px; font-family:Arial; color:#000000; font-weight: bold;
+	display:block; text-align:right; padding-bottom:4px; cursor:pointer;
+}
+.popup_heading .logo {
+	width:173px; height:48px; 
+	float:left;
+	padding:0px; margin:0px;
+	background: url(../img/fixido_logo_en.png?version=2.4.0) no-repeat 0px -140px;
+}
+.popup_heading .linkedin_signup {
+	width: 130px; height:24px;
+	float:left;
+	background: url(../img/linkedin_logo.png?version=2.4.0) no-repeat;	
+}
+.signup_popup .popup_contents, .forgotpassword_popup .popup_contents, .terms_services_popup .popup_contents {
+	padding:0px 17px; position: relative;
+}
+.terms_services_popup .popup_contents {
+	height:400px;
+	overflow: auto;
+}
+.popup_contents input[type="text"], .popup_contents input[type="password"] {
+	width: 317px;	height:23px;
+	color: #333333;
+	font-family:Arial; font-size:14px;
+	margin-bottom:31px;
+}
+.reset_password_popup .popup_contents input[type="text"], .reset_password_popup .popup_contents input[type="password"] {
+	margin-bottom:10px !important;
+}
+.banner_signup_form .form_inputfileds, .popup_contents .form_inputfileds {
+	width:277px !important;
+	line-height: 18px !important;
+    margin-bottom: 8px !important;
+    padding: 4px 4px 4px 6px !important;
+}
+#popup_joinus_form {
+    width: 290px;
+    margin: 0px auto 18px auto;
+}
+.forgotpassword_popup {
+	height:auto;
+	padding:5px;
+	position:absolute;
+	background:#fdfdfd;
+	display: none;	z-index:9991;
+	margin:0px 0px 0px -220px;	left:50%; top: 150px;
+   -webkit-box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.08);
+   -moz-box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.08);
+   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.08);
+ }

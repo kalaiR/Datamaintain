@@ -1,0 +1,47 @@
+{% load static from staticfiles %}
+<html>
+	<head>
+		
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> -->
+<link href="{% static "css/jquery-ui-1.9.2.custom.min.css" %}" rel="stylesheet">
+<script type="text/javascript" src="{% static "js/jquery-1.8.3.js" %}"></script>
+
+<script type="text/javascript" src="{% static "js/jquery-ui-1.9.2.custom.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/action.js" %}"></script>
+
+	</head>
+	<body>
+	<form name="f1" method="post" action="/admin/card/staff_create_attendance/?date={{request.REQUEST.date}}" id="f1">  
+    	{% csrf_token %}	
+		<table>
+		<tr>
+			<th>ID</th>
+			<th>Regno.</th>
+			<th>Full name</th>	
+		</tr>
+		{% for a in student_list %}
+		<tr>
+			<td><input type="text" name="id" value="{{ a.id }}" id="checkbox_attendance"></td>
+			<td><input type="text" name="regno" value="{{ a.reg_no }}" id="checkbox_attendance"></td>
+			<td><input type="text" name="name" value="{{ a.name }}" id="checkbox_attendance"></td>
+			<td><input type="checkbox" name="checkbox" value="{{a.id}}" id="checkbox_attendance"></td>
+		</tr>
+	    {% endfor %}
+	    <tr>
+				<td>
+				{% if request.user.is_superuser %}
+				<input type="checkbox" name="admin_checkbox" value="" id="finalize_admin"> Finalize record by admin
+				{% else %}
+				<input type="checkbox" name="staff_checkbox" value="" id="finalize_staff"> Finalize record by staff
+				{% endif %}
+				</td>
+		</tr>
+	    <tr>
+			<td><input type="submit" name="create" value="Update List" style="font-size:18px;" id="create"/> <td>		
+		</tr>		
+		
+		</table>
+	
+	</form>
+</body>
+</html>

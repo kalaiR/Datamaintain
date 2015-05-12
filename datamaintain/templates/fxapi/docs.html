@@ -1,0 +1,629 @@
+{% extends "fxapi/base.html" %}
+{%block title%}API Documenation - {%endblock%}
+{%block content%}
+{% load i18n %}
+<div class="container">
+<div class="row">
+  <div class="span3"  data-spy="affixs" data-offset-top="200">
+    <ul class="nav nav-list affixs">
+      <li><a href="#overview"><i class="icon-chevron-right"></i> Overview</a></li>
+      <li><a href="#lead-properties"><i class="icon-chevron-right"></i> Lead Properties</a></li>
+      <li><a href="#lead-create"><i class="icon-chevron-right"></i> Leads Create </a></li>
+      <li><a href="#lead-get"><i class="icon-chevron-right"></i> Leads Get</a></li>
+      <li><a href="#lead-list"><i class="icon-chevron-right"></i> Leads List</a></li>
+      <li><a href="#lead-provided-list"><i class="icon-chevron-right"></i> Leads Provided List</a></li>
+      <li><a href="#lead-bought-list"><i class="icon-chevron-right"></i> Leads Bought List</a></li>
+      <li><a href="#lead-update"><i class="icon-chevron-right"></i> Leads Update</a></li>
+      <li><a href="#lead-delete"><i class="icon-chevron-right"></i> Leads Delete</a></li>
+      <li><a href="#lead-buy"><i class="icon-chevron-right"></i> Lead Buy</a></li>
+      <li><a href="#filters-list"><i class="icon-chevron-right"></i> Filters List</a></li>
+      <li><a href="#categories-list"><i class="icon-chevron-right"></i> Categories List</a></li>
+      <li><a href="#search-detail"><i class="icon-chevron-right"></i> Search Detail</a></li>
+      <li><a href="#search-lists"><i class="icon-chevron-right"></i> Search List</a></li>            
+      <li><a href="#recently-search"><i class="icon-chevron-right"></i> Recently Search List</a></li>            
+      <li><a href="#recently-viewed"><i class="icon-chevron-right"></i> Recently Viewed Leads List</a></li>            
+      <li><a href="#trade-list"><i class="icon-chevron-right"></i> Trade List</a></li>            
+    </ul>
+  </div>
+  <div class="span9">
+    <section id="overview">
+      <div class="page-header"><h1>Overview <small>API v2.0</small></h1></div>
+      <p>Fixido provides API to import Leads, Order and to export leads as well. Like every other APIs, its a REST based API. Before you begin using the API, you must register an application to get the access key and secret key. To access REST API, you must have one access key and secret key. You can create an application <a href="/apidocs/">here</a>.</p>
+
+      <p>Once you created the application, system automatically generate access key and secret key for you, which you can see in the same page. System also automatically grant rights to few essential method such as create/edit/list Lead. You can review your rights in <a href="/apidocs/playground/">API Playground</a>. You can create more applications with different roles</p>
+
+      <h3>Technical Information</h3>
+      <p>With every request to the API, you must attach the access key and secret key in POST data. And based on the method, you will also add some more data to POST. Since its REST based API, you can access it using any programming language which perform HTTP Request. </p>
+      <p>Now, Fixido API provides the data in JSON format (also supports JSONP). Response for all the request always follow the same structure. Response object has following properties,
+        <ul>
+          <li><b>status</b> - <i>boolean, true or false</i> - Returns false whenever your request is failed to complete".</li>
+          <li><b>error</b> - <i>list of errors</i> - List of errors which occurred while performing your request.</li>
+          <li><b>data</b> - <i>result object</i> - Actual data for your request.</li>
+        </ul>
+      </p>
+
+      <h3>Sample Request and Response</h3>
+      Request:
+      <div class="well well-small">http://fixido.com/api/<b>leads/list</b>/?access_key=<b><i>[ACCESS_KEY]</b></i>&amp;access_secret=<b><i>[SECRET_KEY]</b></i></div>
+
+      Response:<br/>
+      <pre class="prettyprint linenums">
+        {
+          'status':true,
+          'error':[],
+          'data':[
+            {
+              'title':'Lead Title',
+              'description':'Lead Description'
+            },
+            {
+              'title':'Another Lead Title',
+              'description':'Another Lead Description'
+            }
+          ]
+        }
+      </pre>
+
+    </section>
+
+    <section id="lead-properties">
+      <div class="page-header"><h3>Lead Properties <small>Object Description</small></h3></div>
+      <p>Lead object accepts following properties while creating a new Lead.</p>
+      <table class="table table-bordered table-striped">
+        <colgroup>
+          <col class="span1">
+          <col class="span7">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Which API uses this</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <code>Title</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            <td><i>string</i> - Title of the Lead</td>
+          </tr>
+          <tr>
+            <td>
+              <code>description</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            <td><i>string</i> - Description about the lead</td>
+          </tr>
+          <tr>
+            <td>
+              <code>price</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            <td><i>float</i> - Price of the Lead. Specify cent with.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>price_currency</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            <td><i>string</i> - Price Currency of the <code>price</code> mentioned.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>budget</code>
+            </td>
+            <td>
+              Lead Get and Lead Create
+            </td>
+            <td><i>float</i> - Budget of the Lead.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>budget_currency</code>
+            </td>
+            <td>
+              Lead Get and Lead Create
+            </td>
+            <td><i>string</i> - Currency of the <code>budget</code> mentioned.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>sale</code>
+            </td>
+            <td>
+              Lead List, Lead detail, Search List and Detail
+            </td>
+            <td><i>int</i> - The number of times the same lead information can be sold. One sale, means that one company will contact the consumer. Five sales, means that five companies will contact the consumer.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>deal_starts</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            <td><i>date</i> - Starting date of the lead. It should be in the format of <code>Year-Month-Date Hour:Minute:Second</code></td>
+          </tr>
+          <tr>
+            <td>
+              <code>deal_ends</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            <td><i>date</i> - End date of the lead. It should be in the format of <code>Year-Month-Date Hour:Minute:Second</code></td>
+          </tr>
+          <tr>
+            <td>
+              <code>category_id</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            <td><i>id</i> - ID of the category. Categories can be listed with the Lead Categories API</td>
+          </tr>
+          <tr>
+            <td>
+              <code>keywords</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            
+            <td><i>comma seperated string</i> - Comma seperated keywords</td>
+          </tr>
+          <tr>
+            <td>
+              <code>Id</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            
+            <td><i>Id</i> - Id of the lead.</td>
+          </tr>
+          <tr>
+            <td>
+              <code>Generation date</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            
+            <td><i>date</i> - generation date of the lead. It should be in the format of <code>Year-Month-Date Hour:Minute:Second</code></td>
+          </tr>
+          <tr>
+            <td>
+              <code>Generation method</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            
+            <td><i>String</i> - method of generation of the lead. Values can be phone or website. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Language</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            
+            <td><i>String</i> - language of the lead. Values can be sv, de. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Pre sold</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            
+            <td><i>Int</i> - number of leads sold before entering into fixido. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Total</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search List and Detail
+            </td>
+            
+            <td><i>Int</i> - Total number of leads. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Street</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search Detail
+            </td>
+            
+            <td><i>String</i> - lead contact consumer street information. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>City</code>
+            </td>
+            <td>
+              Lead List, Lead Detail, Search Detail
+            </td>
+            
+            <td><i>String</i> - lead contact consumer city information. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Company name</code>
+            </td>
+            <td>
+              Lead List and Lead Detail
+            </td>
+            
+            <td><i>String</i> - lead contact company name. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Consumer first name</code>
+            </td>
+            <td>
+              Lead List and Lead Detail
+            </td>
+            
+            <td><i>String</i> - lead contact consumer name information. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Consumer last name</code>
+            </td>
+            <td>
+              Lead List and Lead Detail
+            </td>
+            
+            <td><i>String</i> - lead contact consumer name information. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Country</code>
+            </td>
+            <td>
+              Lead List,Lead Detail and Search Detail
+            </td>
+            
+            <td><i>String</i> - lead contact country information. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Postal code</code>
+            </td>
+            <td>
+              Lead List,Lead Detail and Search Detail
+            </td>
+            
+            <td><i>String</i> - lead contact postal code information. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Region</code>
+            </td>
+            <td>
+              Lead List,Lead Detail and Search Detail
+            </td>
+            
+            <td><i>String</i> - region of lead consumer. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Email</code>
+            </td>
+            <td>
+              Lead List and Lead Detail
+            </td>
+            
+            <td><i>String</i> - lead contact email information. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Generation source</code>
+            </td>
+            <td>
+              Lead List and Lead Detail
+            </td>
+            
+            <td><i>String</i> - lead generation source. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Preferred method</code>
+            </td>
+            <td>
+              Lead List and Lead Detail
+            </td>
+            
+            <td><i>String</i> - the way which lead consumer wants to be contacted. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Reference</code>
+            </td>
+            <td>
+              Leads List
+            </td>
+            
+            <td><i>String</i> - your internal lead reference. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Status</code>
+            </td>
+            <td>
+              Lead List and Lead Detail
+            </td>
+            
+            <td><i>String</i> - denotes status of the lead. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Accept campaign</code>
+            </td>
+            <td>
+              Search List and Detail
+            </td>
+            
+            <td><i>Boolean</i> - indicates whether the lead can be used for campaign or not. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Created</code>
+            </td>
+            <td>
+              Search List and Detail
+            </td>
+            
+            <td><i>date</i> - date when the lead was created. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Available</code>
+            </td>
+            <td>
+              Search Detail
+            </td>
+            
+            <td><i>Int</i> - number of slots available for this lead. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Sold</code>
+            </td>
+            <td>
+              Search List and Detail
+            </td>
+            
+            <td><i>Int</i> - number of slots sold for this lead. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Reinquire</code>
+            </td>
+            <td>
+              Lead create and Lead update
+            </td>
+            
+            <td><i>Boolean</i> - tells whether this lead has been seen before. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Set auction</code>
+            </td>
+            <td>
+              Lead create
+            </td>
+            
+            <td><i>on/off or 1/0</i> - tells whether this lead should used for auction. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Minimum price</code>
+            </td>
+            <td>
+              Lead create
+            </td>
+            
+            <td><i>Float</i> - minimum price for lead during auction. </td>
+          </tr>
+          <tr>
+            <td>
+              <code>Minutes to auction start</code>
+            </td>
+            <td>
+              Lead create
+            </td>
+            
+            <td><i>Int</i> - setting the time for auction. </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="lead-create">
+      <div class="page-header"><h3>Leads Create <small>- creates a new lead</small></h3></div>
+      <p>Use Leads Create to create a new lead in the Fixido marketplace system.</p>
+
+      <p>Make sure to provide as much information as possible to give the buyers a great lead.</p>
+      <p>You need to be a seller in Fixido in order to create a lead. If not, fill up the form in Fixido dashboard provided leads page.</p>
+	   <a target="blank" href="/static/legaldocuments/Leads_guidelines.pdf">Guideline for creating Leads</a>
+
+    </section>
+    
+    <section id="lead-get">
+      <div class="page-header"><h3>Leads Get <small>- get your lead details</small></h3></div>
+      <p>Use Leads Get to return details for a specified lead. With Leads Get you can only return your provided and bought leads</p>
+
+      <p>Input: Lead Id</p>
+
+
+    </section>
+    
+        <section id="lead-list">
+      <div class="page-header"><h3>Leads List <small>- list your leads</small></h3></div>
+      <p>Use Leads List to return a list of your provided leads. With Leads List you can only return your provided leads.</p>
+
+    </section>
+        
+        </section>
+    
+        <section id="lead-provided-list">
+      <div class="page-header"><h3>Leads Provided List <small>- list your provided leads</small></h3></div>
+      <p>Use Leads provided List to return a list of your provided leads. With Leads provided List you can only return your provided leads.</p>
+
+    </section>
+        
+        </section>
+    
+        <section id="lead-bought-list">
+      <div class="page-header"><h3>Leads Bought List <small>- list your bought leads</small></h3></div>
+      <p>Use Leads bought List to return a list of your bought leads. With Leads bought List you can only return your bought leads.</p>
+
+    </section>
+    
+        <section id="lead-update">
+      <div class="page-header"><h3>Leads Update <small>- update your leads</small></h3></div>
+      <p>Use Leads Update to update your leads. You can only update data in your provided leads.</p>
+
+      <p>Input: Lead Id</p>
+
+
+    </section>
+    
+        <section id="lead-delete">
+      <div class="page-header"><h3>Leads Delete <small>- delete your lead</small></h3></div>
+      <p>Use Leads Delete to delete your leads. You can only delete any of your provided leads.</p>
+
+      <p>Input: Lead Id</p>
+
+
+    </section>
+        
+        
+    <section id="lead-buy">
+      <div class="page-header"><h3>Lead Buy <small>- Buy a lead</small></h3></div>
+      <p>Use Lead Buy to purchase a lead from Fixido. You can buy any leads that are available in Fixido.</p>
+
+      Input: 
+      <p>Lead Id: Indicates the lead id that has to be purchased.</p>
+      <p>Quantity: by default it will be 1. Ignore this field.</p>
+      <p>Payment: by default it will be Fixido account.</p>
+      
+
+
+    </section>
+    
+    <section id="filters-list">
+      <div class="page-header"><h3>Filters List <small>- lists your filter</small></h3></div>
+      <p>Use filters list to check the filters that are applicable/created by you.</p>
+
+      Input: 
+      <p>Page: pagination. Specify the page number you need. Start with 1. Check the output to see how many pages exists.</p>
+      <p>Result_per_page: Indicates the number of results to be displayed in each page.</p>
+      
+
+
+    </section>
+    
+    
+        <section id="categories-list">
+      <div class="page-header"><h3>Categories List <small>- list all lead categories</small></h3></div>
+      <p>Use Categories List to get a list of all lead categories in the Fixido marketplace system.</p>
+
+      <p>Use the categories with the leads</p>
+      Input:
+      <p>language (ISO-639-1, two characters language codes; For ref: http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)</p>
+      <p>Page: pagination. Specify the page number you need. Start with 1. Check the output to see how many pages exists.</p>
+      <p>Result_per_page: Indicates the number of results to be displayed in each page.</p>
+    </section>
+    
+    
+        <section id="search-detail">
+      <div class="page-header"><h3>Search Detail <small>- Get details of the searched lead</small></h3></div>
+      <p>Use Search Detail to return details for a specified lead. With Lead Get you can return data from any leads in the system. If you bought the lead, you will also see all locked contact details (like phone number and e-mail)</p>
+
+
+      <p>Input: Lead Id</p>
+
+
+    </section>        
+
+        
+        <section id="search-lists">
+      <div class="page-header"><h3>Search List <small>- Search for leads</small></h3></div>
+
+      <p>Use Search List to get a list of leads. You specify search criteria and use pagination.</p>
+
+      <p>Inputs:</p>
+
+
+  <p>q = criteria (specify any search words you need. Leave blank to get all leads)</p>
+
+
+  <p>page = pagination. Specify the page number you need. Start with 1. Check the output to see how many pages exists in your result.</p>
+
+
+  <p>budget_start = What the consumer wants to spend on the product/service. Minimum.</p>
+
+
+  <p>budget_end = What the consumer wants to spend on the product/service. Maximum.</p>
+
+
+  <p>deal_start = When the consumer interest starts.</p>
+
+
+  <p>deal_end = When the consumer interest ends.</p>
+
+
+  <p>price_start = Lead price. Minimum.</p>
+
+
+  <p>price_end = Lead price. Maximum.</p>
+
+
+  <p>locations = Specify the location of the consumer.</p>
+
+    </section>
+        
+        
+    <section id="recently-search">
+      <div class="page-header"><h3>Recently Search List <small>- get your recent searches</small></h3></div>
+      <p>Use recently search list to view the latest search done by you in Fixido. It lists all the search text by user by recent search text at top.</p>
+
+    </section>
+    
+    <section id="recently-viewed">
+      <div class="page-header"><h3>Recently Viewed Leads List <small>- get recently viewed leads list</small></h3></div>
+      <p>Use recently viewed leads to view the latest leads by you in Fixido. It lists all the leads viewed by user by recent leads at top.</p>
+
+    </section>
+    
+    <section id="trade-list">
+      <div class="page-header"><h3>Trade List <small>- get trade lists</small></h3></div>
+      <p>Use trade list to return details of trade for your lead. As a lead seller, it will be helpful for you to view the list of your leads sold in Fixido.</p>
+
+    </section> 
+  
+  </div>
+
+</div>
+
+</div><!-- container -->
+
+{%endblock%}

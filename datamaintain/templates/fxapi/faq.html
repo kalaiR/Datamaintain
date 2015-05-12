@@ -1,0 +1,14 @@
+{% extends "fxapi/base.html" %}
+{%block title%}FAQ - {%endblock%}
+{%block content%}
+{% load i18n %}
+<div class="container">
+<h1>Fixido FAQ</h1>
+
+<h3>{% trans "Does Fixido REST API follows oAuth standards?" %}</h3>
+<p>{% trans "No, oAuth standard protocol does not fit into the Fixido Enviroment for various reasons" %}. </p>
+
+<h3>{% trans "Can Fixido REST access from Server Side Application?" %}</h3>
+<p>{% trans "Yes. API is accessible via HTTP protocol from any platform" %}.</p>
+</div><!-- container -->
+{%endblock%}

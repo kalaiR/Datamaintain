@@ -1,0 +1,53 @@
+{% load i18n %}
+{% if not user.is_anonymous %}
+<ul class="logedin_footer">
+    <li>
+        <a href="/aboutus/">{% trans "About" %}</a>
+    </li>
+    <li class="footer_nav_seperator"> </li>
+    <li>
+        <a href="/contact/">{% trans "Contact" %}</a>
+    </li>
+    <li class="footer_nav_seperator"> </li>
+    <li>
+        <a href="/apidocs/">{% trans "Developers" %}</a>
+    </li>
+    <li class="footer_nav_seperator"> </li>
+    <li>
+        <a href="/privacy_policy/">{% trans "Privacy policy" %}</a>
+    </li>
+    <li class="footer_nav_seperator"> </li>
+    <li>
+        <a href="/termsofservices/">{% trans "Terms of service" %}</a>
+    </li>
+    <p class="copyright">
+        &copy; {% now "Y" %} Fixido AB
+    </p>
+</ul>
+{% else %}
+<ul class="guest_footer">
+    <li>
+        <a href="/aboutus/">{% trans "About" %}</a>
+    </li>
+    <li class="footer_nav_seperator"></li>
+    <li>
+        <a href="/contact/">{% trans "Contact" %}</a>
+    </li>
+    <li class="footer_nav_seperator"></li>
+    <li>
+        <a href="/apidocs/">{% trans "Developers" %}</a>
+    </li>
+    <li class="footer_nav_seperator"></li>
+    <li>
+        <a href="/">{% trans "Join us" %}</a>
+    </li>
+    <li class="footer_nav_seperator"></li>
+    <li>
+        <a href="/">{% trans "Sign in" %}</a>
+    </li>
+
+</ul>
+<p class="copyright">
+    &copy; {% now "Y" %} Fixido AB
+</p>
+{% endif %}

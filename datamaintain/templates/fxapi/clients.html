@@ -1,0 +1,93 @@
+{% extends "fxapi/base.html" %}
+{%block title%}Applications - {%endblock%}
+{%block content%}
+{% load i18n %}
+<div class="container">
+<div class="row"><div class="span8 offset2">
+<h1>{% trans "Your applications" %}</h1>
+{%if clients%}
+	
+	<table class="table table-hover table-condensed">
+	  <caption></caption>
+	  <thead>
+	    <tr>
+	      <th>{% trans "Name" %}</th>
+	      <th>{% trans "Access key" %}</th>
+	      <th>{% trans "Secret key" %}</th>
+	      <th>{% trans "Domain" %}</th>
+	      <th>{% trans "Active" %}</th>
+	      <th></th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	{%for client in clients%}
+	    <tr>
+	      <td>{{client.name}}</td>
+	      <td>{{client.access_key}}</td>
+	      <td>{{client.access_secret}}</td>
+	      <td>{{client.domain}}</td>
+	      <td>{{client.active}}</td>
+	      <td>
+	      	<form method="POST">{% csrf_token %}
+	      		<input type="hidden" name="action" value="delete"/>
+	      		<input type="hidden" name="delete_id" value="{{client.pk}}"/>
+	      		<button type="submit" class="btn btn-mini btn-danger" onclick="javascript:return confirm('Are you sure about it?')">{% trans "Delete" %}</button>
+	      	</form>
+	      </td>
+	    </tr>
+	    {%endfor%}
+	  </tbody>
+	</table>
+{%else%}
+	<div class="alert alert-block">
+  		<h4>{% trans "No Application" %}</h4>
+  		{% trans "You don't have any applications" %}
+	</div>
+{%endif%}
+
+	<hr/>
+	<h1>{% trans "Create new Application" %}</h1>
+	<form method="post" class="form-horizontal">{% csrf_token %}
+
+	  <div class="control-group">
+	    <label class="control-label" for="inp_name">{% trans "Application name" %}</label>
+	    <div class="controls">
+	      <input type="text" class="input-xlarge" required name="name" id="inp_name" placeholder="Example: Sales Force Lead Importer"><span class="help-block">{% trans "Name for your reference, Example: Sales Force Lead Importer" %}</span>
+	    </div>
+	  </div>
+
+	  <div class="control-group">
+	    <label class="control-label" for="inp_domain">{% trans "Domain" %}</label>
+	    <div class="controls">
+	      <input type="text" class="input-xlarge"  name="domain" id="inp_domain" placeholder="Example: *.salesforce.com"><span class="help-block">{% trans "Required for webapplication. Use * to support mulitple subdomains" %}</span>
+	    </div>
+	  </div>
+
+
+	  <div class="control-group">
+	    <label class="control-label" for="inp_desc">{% trans "Desciption" %}</label>
+	    <div class="controls">
+	      <textarea class="input-xlarge"  name="description" id="inp_desc"></textarea>
+	    </div>
+	  </div>
+
+	  <div class="control-group">
+	    <div class="controls">
+	      <label class="checkbox">
+	      <input type="checkbox" value="" name="" class="fl submit_enable_act" checked="checked"  />
+	      	<label class="fl termsofservice_act" for="t_c">{% trans "I accept Fixido" %} <a class="link_blue underline" href="javascript:void(0);">{% trans "Terms of service" %}</a></label>
+	        <!-- <input type="checkbox" name="accept" checked  required="required" class="termsofservice_act">{% trans "I accept Terms &amp; Conditions" %} -->
+	      </label>
+	    </div>
+	  </div>
+      <div class="form-actions">
+		  <button type="submit" class="btn btn-primary">{% trans "Save changes" %}</button>
+		  <button type="button" class="btn">{% trans "Cancel" %}</button>
+	  </div>
+	</form>
+
+<br/>
+
+</div></div>
+</div><!-- container -->
+{%endblock%}

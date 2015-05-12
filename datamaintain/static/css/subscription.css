@@ -1,0 +1,84 @@
+.new_subscription_form {
+    padding: 22px 0px 0px 15px;
+    margin: 0px;
+    color: #000;
+}
+.new_subscription_form ul {
+    margin-left: 0px;
+}
+.new_subscription_form li label {
+    width: 135px;
+    display: block;
+    line-height: 26px;
+    font-family: Arial;
+    font-size: 14px;
+}
+.new_subscription_form li label.needspace {
+    width: auto;
+}
+.new_subscription_form input, 
+.new_subscription_form li textarea {
+    width: 225px;
+    border-radius: 3px;
+}
+.new_subscription_form li select, 
+.new_subscription_form li .select {
+    width: 235px;
+    border-radius: 3px;
+}
+.new_subscription_form li .select {
+    width: 213px;
+    border: 1px solid #cccccc;
+}
+.new_subscription_form li textarea {
+    height: 90px;
+}
+.new_subscription_form li span.units {
+    position: absolute;
+    font-size: 12px;
+    color: #818181;
+    left: 220px;
+    top: 5px;
+}
+.new_subscription_form li.bidding input {
+    width: 113px !important;
+    margin-right: 10px !important;
+}
+.new_subscription_form li.bidding .custom_select select {
+    width: 75px;
+}
+.new_subscription_form li.bidding .custom_select .select {
+    width: 53px;
+}
+.new_subscription_form li .multiple_input .hasDatepicker {
+    width: 70px !important;
+    margin-right: 6px !important;
+}
+.new_subscription_form li .multiple_input .mid-label {
+    width: 35px;
+    margin-left: 10px !important;
+}
+.new_subscription_form li.divider {
+    margin: 0px 0px 25px;
+}
+.new_subscription_form li.bidding .checkbox {
+    width:16px !important;
+    height:26px;
+    margin:0px 5px 0px 0px;
+}
+.new_subscription_form li legend {
+    display: block;
+    width: 450px;
+    padding: 0px 10px;
+    margin-bottom: 27px;
+    font-size: 16px;
+    line-height: 36px;
+    color: #333333;
+    border: 1px solid #e5e5e5;
+    background-color: #f5f5f5;
+}
+.save_subscription {
+    margin: 0px 0px 0px 245px;
+    width: 175px;
+    height: 29px;
+}

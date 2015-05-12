@@ -1,0 +1,160 @@
+
+{% load static from staticfiles %}
+
+
+{% block title %}Admin atttendance list creation {% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{% static "css/jquery-ui.css" %}">
+<link rel="stylesheet" href="{% static "css/jquery.ui.datepicker.css" %}">
+<link rel="stylesheet" href="{% static "admin/css/base.css" %}?version={{version}}" >
+<link rel="stylesheet" href="{% static "admin/css/changelists.css" %}?version={{version}}" >
+
+{% endblock %}
+
+{% block script %}
+<script>
+var token = $('[name=csrfmiddlewaretoken]:first').val();
+function get_actor(aid){
+    $('[name=filter_actor]').val(aid);
+    $.ajax({
+        url: '{{ request.path }}basic/',
+        type: 'post',
+        data: {
+            csrfmiddlewaretoken: token,
+            filter_actor: aid
+        },
+        success: function(data, txtStatus, jqXHR){
+            $('#actor_card').html(data)
+        },
+    });
+}
+function get_page(tab, page, tType){
+    if(typeof(tType)==='undefined') tType = '';
+    var aid = $('[name=filter_actor]').val();
+    $.ajax({
+        url: '{{ request.path }}' + tab + '/',
+        type: 'post',
+        data: {
+            page: page, 
+            txn_type: tType, 
+            filter_actor: aid,
+            csrfmiddlewaretoken: token
+        },
+        success: function(data, txtStatus, jqXHR){
+            $(data).replaceAll('.' + tab + '-id')
+        },
+    });
+}
+$('#custom_filter').live('submit', function(){
+    $.ajax({
+        url: '{{ request.path }}search/',
+        type: 'post',
+        data: {
+            csrfmiddlewaretoken: token,
+            search_actor: $('#search_actor').val()
+        },
+        success: function(data, txtStatus, jqXHR){
+            $('#actor_set').html(data)
+        },
+    });
+    return false;
+})
+
+$(document).on('click', '#edit_address', function(){
+    var actor_id = $('#actor_id').val()
+    if (actor_id != ''){ 
+    $('#save_address').show()
+    $('#cancel_address').show()
+    $(".span6 input").each(function() {
+        if ($(this).attr('name') != 'email' &&
+            $(this).attr('name') != 'country' &&
+            $(this).attr('name') != 'company_country')
+        {
+            $(this).attr('readonly',false)
+        }
+    });
+    $(".span8 textarea").each(function() {
+        $(this).attr('readonly',false)
+    });
+    $(".span4 input:checkbox").each(function() {
+        $(this).attr('readonly',false)
+    });
+    }
+    else{
+        alert('Please select a actor to edit')
+    }
+});
+
+$(document).on('click', '#cancel_address', function(){
+    $('#save_address').hide()
+    $('#cancel_address').hide()
+    $(".span6 input").each(function() {
+        $(this).attr('readonly',true)
+    });
+    $(".span8 textarea").each(function() {
+            $(this).attr('readonly',true)
+    });
+    $(".span4 input:checkbox").each(function() {
+            $(this).attr('readonly',true)
+    });
+});
+
+$(document).on('click', '#save_address', function(){
+    var load_data = $('.address_form').serialize()
+    $.ajax({
+        url:'/actor_edit/',
+        type:'post',
+        data:load_data,
+        success: function(response_data){
+            //alert(response_data)
+            $('#actor_card').html(response_data)
+            var aid = $('[name=filter_actor]').val();
+            get_actor(aid);
+            //var res = JSON.parse(response_data);
+            ////alert(res['status'])
+            //if (res['status'] == true) {
+            //    alert('Updated successfully')
+            //    window.location.reload()
+            //    //$('#search_actor').val('')
+            //    //$('#search_actor').val(res['search_term'])
+            //    
+            //}
+            //else{
+            //    alert('Some error occurred')
+            //}
+        },
+    });
+});    
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container bottom-space">
+  {% if not is_popup %}
+  {% block breadcrumbs %}
+  <div class="breadcrumbs">
+  <a href="">Home</a>
+  
+  &rsaquo; Create Attendance list
+  </div>
+  {% endblock %}
+  {% endif %}
+
+    <!-- <form method="POST" action='{{ request.path }}' class="report-filter" id="custom_filter">
+        {% csrf_token %}
+        <label class="need-space" for='search_actor'>Search</label>
+        <input class="span6 need-space" type="Search" name="search_actor" value="{{ actor.email }}" id="search_actor" autocomplete="off" autofocus />
+        <input class="btn" type="submit" name="change_list" value="Get actor" />
+        <input type="hidden" name="filter_actor" value="{{ actor.id }}" id="filter_actor" />
+    </form> -->
+    <div id='actor_set'>
+        {% if 'date' in request.REQUEST %}
+        {% include "card/attendance_list1.html" %}
+        {% else %}
+        {% include "card/attendance_list.html" %}
+        {% endif %}
+    </div>
+    
+</div>
+{% endblock %}

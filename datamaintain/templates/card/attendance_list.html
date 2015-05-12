@@ -1,0 +1,70 @@
+{% load static from staticfiles %}
+<html>
+	<head>
+		
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> -->
+<link href="{% static "css/jquery-ui-1.9.2.custom.min.css" %}" rel="stylesheet">
+<script type="text/javascript" src="{% static "js/jquery-1.8.3.js" %}"></script>
+
+<script type="text/javascript" src="{% static "js/jquery-ui-1.9.2.custom.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/action.js" %}"></script>
+
+	</head>
+	<body>
+<form name="f1" method="post" action="/create_excel/" id="f1">  
+    	{% csrf_token %}
+
+		<div>
+			<label for="department">Department: *</label>
+            <select id="department" name="department">
+			<option selected="selected" value="">--Select department--</option>
+			{% for departments in department %} 
+			<option value="{{ departments.id }}">{{ departments.department }}</option>
+			{% endfor %}
+			</select><br>
+
+			<label for="degree">Degree: *</label>
+			<select id="degree" name="degree">
+			<option selected="selected" value="">--Select degree--</option>
+			{% for degrees in degree %} 
+			<option value="{{ degrees.id }}">{{ degrees.degree }}</option>
+			{% endfor %}
+			</select><br>
+
+			<label for="year">Year: *</label>
+			<select id="year" name="year">
+			<option selected="selected" value="">--Select year--</option>
+			{% for years in year %} 
+			<option value="{{ years.id }}">{{ years.year }}</option>
+			{% endfor %}
+			</select><br>			
+			<p>Date:<input type="text" id="datepicker" value="{{requestdate|date:'d/m/y'}}" name="date" class="date_picker"></p>
+			<!-- <label for="date">Date: *</label>
+			<input type ="text" name="date" value="{{now|date:'d/m/y'}}"> -->
+		</div>	
+		<div>
+			<table>
+			<tr>
+			<th>ID</th>
+			<th>Regno.</th>
+			<th>Full name</th>
+			</tr>			
+			{% for a in admission %}
+			<tr>
+				<td><input type="text" name="id" value="{{ a.id }}" id="checkbox_attendance"></td>
+				<td><input type="text" name="regno" value="{{ a.reg_no }}" id="checkbox_attendance"></td>
+				<td><input type="text" name="name" value="{{ a.name }}" id="checkbox_attendance"></td>
+				<td><input type="checkbox" name="checkbox" value="{{a.id}}" id="checkbox_attendance"></td>
+			</tr>
+        	{% endfor %}
+        	
+    		<tr>
+			<td><input type="submit" name="create" value="Create List" style="font-size:18px;" id="create"/> <td>
+			</tr>
+			
+			</table>
+		</div>	
+
+</form>
+</body>
+</html>

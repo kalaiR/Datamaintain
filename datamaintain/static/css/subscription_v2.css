@@ -1,0 +1,322 @@
+@media (max-width: 768px) {
+	*, *:before, *:after {
+		box-sizing: border-box;
+	}
+	.fl {
+		float: left;
+	}
+	.fr {
+		float: right;
+	}
+	.clear_both {
+		clear: both;
+	}
+	.t_c {
+		text-align: center;
+	}
+	.hidden-xs {
+		display: none;
+	}
+
+	.visible-xs {
+		display: block;
+	}
+	body {
+		margin: 0;
+	}
+
+}
+
+/*styles for desktop*/
+
+@media (min-width: 768px) {
+	.subscription_wrap *, .subscription_wrap *:before, .subscription_wrap *:after {
+		box-sizing: border-box;
+	}
+	.visible-xs {
+		display: none;
+	}
+	.padding_hr {
+		padding: 0 10px;
+	}
+	.fl {
+		float: left;
+	}
+	.fr {
+		float: right;
+	}
+	.clear_both {
+		clear: both;
+	}
+	.t_c {
+		text-align: center;
+	}
+	.pos_r {
+		position: relative;
+	}
+	.pos_a {
+		position: absolute;
+	}
+	.no_padding {
+		padding: 0 !important;
+	}
+	h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+		line-height: 1.43;
+	}
+	body {
+		font-family: arial;
+		font-size: 14px;
+		line-height: 21px;
+	}
+	.subscription_wrap {
+		margin: 0 auto;
+		width: 830px;
+	}
+	.subscription_full_wrap {
+		width: 960px;
+	}
+	.subscription_content {
+		float: left;
+		padding: 15px 30px 30px 50px;
+		width: 830px;
+	}
+	.subscription_full_content {
+		width: 960px;
+	}
+	.subscription_wrap h2 {
+		color: #4b576e;
+		font-family: arial;
+		font-size: 25px;
+		font-weight: normal;
+		line-height: 40px;
+		margin-bottom: 10px;
+		padding-left: 0px;
+	}
+	.subscription_full_wrap h2 {
+		color: #252525;
+		font-family: arial;
+		font-size: 30px;
+		font-weight: normal;
+		line-height: 40px;
+		margin-bottom: 10px;
+	}
+	.subscription_wrap h4 {
+		font-size: 16px;
+		line-height: 24px;
+		margin-bottom: 0;
+	}
+	.subscription_wrap p {
+		margin-top: 0;
+	}
+	.subscription_content a {
+		color: #559fd9;
+		text-decoration: underline;
+	}
+	.subscription_content a:hover {
+		text-decoration: none;
+	}
+	#form_subscription .add_lead_custom_select {
+		height: 47px;
+	}
+	#form_subscription .selectedfilter {
+		width: 550px;
+	}
+	#form_subscription .custom_select .select {
+		border-color: #d7d7d7;
+		/*		border-width: 1px 1px 1px 0;*/
+		padding: 5px 10px;
+	}
+	#form_subscription .selectedfilter .select {
+		width: 550px;
+	}
+	.no_sep {
+		border-width: 1px 1px 1px 0 !important;
+	}
+	#form_subscription .selectedfilter .select p {
+		opacity: 0.5;
+	}
+	#form_subscription .selectedfilter .select p {
+		font-size: 14px;
+		width: 540px;
+	}
+	#form_subscription .custom_select #selectedfilter {
+		width: 550px;
+	}
+	#form_subscription .custom_select .custom_select_value_act {
+		text-transform: none;
+	}
+	.subscription_bid {
+		position: relative;
+	}
+	.subscription_bid_input {
+		color: #252525;
+		height: 47px;
+		padding-left: 10px !important;
+		padding-right: 70px !important;
+		width: 319px;
+		font-size: 14px !important;
+	}
+	.input_currency {
+		left: 270px;
+		opacity: 0.5;
+		position: absolute;
+		top: 12px;
+	}
+	.blocks_wrap {
+		background: none repeat scroll 0 0 #f7f7f7;
+		border: 1px solid #ececec;
+		float: left;
+		margin-bottom: 10px;
+		width: 320px;
+	}
+	.adv_setting_wrap {
+		margin-bottom: 30px;
+	}
+	.blocks_wrap_title {
+		background: none repeat scroll 0 0 #efefef;
+		color: #559fd9;
+		padding: 10px;
+		font-size: 16px;
+		cursor: pointer;
+	}
+	.block_content {
+		padding: 20px 9px;
+		display: none;
+	}
+	.budget_value, .from_date, .to_date {
+		color: #252525;
+		height: 47px;
+		padding-left: 10px;
+		padding-right: 70px;
+		width: 150px !important;
+	}
+	.from_date, .to_date {
+		cursor: pointer;
+	}
+	.budget_time, .cal_icon {
+		left: 110px;
+		opacity: 0.5;
+		top: 12px;
+	}
+	.cal_icon {
+		left: 120px;
+	}
+	.block_content .custom_select {
+		height: 47px;
+		width: 149px;
+	}
+	.block_content .custom_select .select {
+		padding: 5px 10px;
+		width: 150px;
+	}
+	.block_content .custom_select .select p {
+		/*		opacity: 0.5;*/
+		width: 100%;
+		font-size: 14px;
+	}
+	.block_content .custom_select select {
+		width: 150px;
+	}
+	.bought_leads_count, .subscr_input {
+		color: #252525;
+		height: 47px;
+		padding-left: 10px;
+		padding-right: 70px;
+		width: 150px;
+	}
+	.subscr_input {
+		width: 300px;
+	}
+	.leads_txt {
+		left: 110px;
+		opacity: 0.5;
+		top: 12px;
+	}
+	.block_content input, .block_content .select {
+		border-color: #d7d7d7;
+		border-radius: 0;
+		box-shadow: none;
+	}
+	.cal_icon i {
+		font-size: 18px;
+		cursor: pointer;
+	}
+	.save_subscr {
+		height: 40px;
+		width: 175px !important;
+		margin-bottom: 10px
+	}
+	.cancel_subscr {
+		color: #898989 !important;
+		cursor: pointer;
+		float: left;
+		margin-left: 30px;
+		margin-top: 20px;
+		text-decoration: none !important;
+	}
+	#selected_filters{
+		float: left;
+		width: 550px;
+	}
+	#selected_filters div {
+		background-color: #559fd9;
+		border-radius: 3px;
+		color: #ffffff;
+		float: left;
+		margin-bottom: 10px;
+		margin-right: 5px;
+		padding: 5px 7px 5px 10px;
+	}
+	#selected_filters div span{
+		padding-right: 10px;
+	}
+	#selected_filters div a {
+  		color: #2a6496;
+	}
+	.mandatory_mark{
+		left: -16px;
+		top: 17px;
+		font-size: 18px;
+		line-height: 18px;
+	}
+	.mark_red {
+		color: #ed1c24;
+	}
+	.mark_green {
+		color: #16C01D;
+	}
+	#form_subscription {
+		float: left;
+		margin-top: 20px;
+	}
+	#form_subscription input {
+		font-size: 14px !important;
+		color: #252525 !important;
+	}
+	#form_subscription .btn {
+		color: #ffffff !important;
+		font-size: 15px !important;
+		float: left;
+	}
+	#form_subscription .custom_select .select .custom_drop_nav {
+		right: 10px;
+		top: 5px;
+	}
+	.restrict_bought_title {
+		margin-top: 10px;
+	}
+	.m_t {
+		margin-top: 20px;
+	}
+	.subscription_wrap .callus_block{
+		left: 27px;
+		margin:20px 0px 100px 0px;
+	}
+	.subscription_wrap .contact_no_block{
+		height:119px;
+		width: 420px;
+	}
+	.add_lead_custom_select select {
+	    height: 47px;
+	}
+}

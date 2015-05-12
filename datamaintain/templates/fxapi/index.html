@@ -1,0 +1,58 @@
+{% extends "fxapi/base.html" %}
+{%block content%}
+{% load i18n %}
+<!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+      	<div class="container">
+      	<div class="hero-unit-col1 pull-left">
+        <h1>{% trans "Hello, Developer!" %}</h1>
+        <p>{% trans "Create new client application using the API from Fixido. It's easy to use. Register your client application" %} <a href="/apidocs/clients/">here</a> and start using Fixido REST API. Explore the API and documentation <a href="/apidocs/docs/">here</a>.</p>
+
+        {% if user.is_authenticated %}
+        	<p><a class="btn btn-primary btn-large"  href="/apidocs/clients/">{% trans "Create New Client Application" %} &raquo;</a></p>
+        	{% else %}
+        	<p><a class="btn btn-primary btn-large user_api_login"  href="javascript:void(0);">{% trans "Create New Client Application" %} &raquo;</a></p>
+        {% endif %}			
+
+		</div><!-- hero-unit-col1 -->
+		<div class="hero-unit-col2 pull-left">
+			
+		</div><!-- hero-unit-col2 -->
+		<div class="clear_both"> </div>
+		</div>
+	 </div>
+      <div class="container services">
+	      <!-- Example row of columns -->
+	      <div class="row" style="margin-left: 0px;">
+	        <div class="span4" style="width: 360px">
+	          <h2>{% trans "Client Application" %}</h2>
+	          <p>{% trans "To make an integration to Fixido system, you must register for a client application and get access_key and secret_key. You can have multiple application with different rights. Rights defines, what you do using Fixido REST API. When you create a new application, you will get some default rights to some basic operations. "%}</p>
+
+	          {% if user.is_authenticated %}
+	              	<p><a class="btn"  href="/apidocs/clients/">Create Application &raquo;</a></p>
+	          {% else %}
+	          		<p><a class="btn user_api_login"  href="javascript:void(0);">Create Application &raquo;</a></p>             
+	          {% endif %}                    
+
+	        </div>
+	        <div class="span4" style="width: 360px">
+	          <h2>Playground</h2>
+	          <p>In our playground you can test all of our API methods. You see the result instantly and can also get access to sample code snippets and output. <br><br><br><br></p>
+
+	          {% if user.is_authenticated %}
+		          <p><a class="btn" href="/apidocs/playground/">View details &raquo;</a></p>
+	          {% else %}
+	          		<p><a class="btn user_playground_login"  href="javascript:void(0);">View details &raquo;</a></p>             
+	          {% endif %}
+	       </div>
+	        <div class="span4 support" style="width: 360px">
+	          <h2>Support</h2>
+	          <span><i class="fa fa-phone-square"> </i> 030 - 567 954 62</span>
+	          <span><i class="fa fa-envelope"> </i> <a href="mailto:developer@fixido.com">developer@fixido.com</a></span>
+	          
+	          <h3>Have questions?</h3>
+	          <p><a class="btn" href="/apidocs/faq/">Check FAQ &raquo;</a></p>
+	        </div>
+	      </div>
+     </div><!-- container --> 
+{%endblock%}

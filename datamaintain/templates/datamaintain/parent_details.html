@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>parent_details</title>
+  <meta name="description" content="">
+  <meta name="author" content="Sales">
+
+  <meta name="viewport" content="width=device-width; initial-scale=1.0">
+
+  <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+</head>
+
+<body>
+  <div>
+    <form name="f1" method="post" action="/parent_details/" id="f1">
+    		{% csrf_token %}
+		    	<table>			 
+			    	<tr>
+		                <td class="f1_label">Father Name :</td><td><input type="text" name="fathername" value="" />
+		                
+	            	</tr>
+	            	
+	            	<tr>
+		                <td class="f1_label">Mother Name :</td><td><input type="text" name="mothername" value="" />
+		                
+	            	</tr>
+	            	
+	            	<tr>
+		                <td class="f1_label">Address:</td><td><input type="text" name="Address" value="" />
+		                
+	            	</tr>
+	            	
+	            	<tr>
+		                <td class="f1_label">Email:</td><td><input type="text" name="Email" value="" />
+		                
+	            	</tr>
+	            	
+	            	<tr>
+		                <td class="f1_label">Pnone No :</td><td><input type="text" name="phone_no" value="" />
+		                
+	            	</tr>
+	            	
+	            	<!-- <tr>
+                      	<td>
+                
+                        <input type="submit" name="parent_details" value="Parent_details" style="font-size:18px; " />
+                
+                       </tr>
+	            	 -->
+	            	</table>
+			</form>
+			
+	            	
+	            	
+	            	
+	            	
+  </div>
+</body>
+</html>
