@@ -17,18 +17,21 @@
 {% endblock %}
 
 {% block content %}
-<div id="content-main">{% csrf_token%}
+<div id="content-main">
+{% csrf_token%}
 
 {% if app_list %}
     <div class="module">
     <table summary="Actor card">
-        <caption><a href="#" class="section">Cards</a></caption>
+        <caption><a href="#" class="section">Staffs</a></caption>
+        {% if request.user.is_superuser %}
         <tr>
             <th scope="row"><a href="/admin/card/create_attendance/">Create Attendance list</a></th>
             
             <td>&nbsp;</td>
             <td><a href="/admin/card/create_attendance/" class="changelink">Change</a></td>
         </tr>
+        {% endif %}
 		
 		<tr>
             <th scope="row"><a href="/admin/card/view_attendance/">View Attendance list</a></th>
@@ -80,42 +83,3 @@
 </div>
 {% endblock %}
 
-{% block sidebar %}
-<div id="content-related">
-    <div class="module" id="recent-actions-module">
-        <h2>{% trans 'Recent Actions' %}</h2>
-        <h3>{% trans 'My Actions' %}</h3>
-            {% load log %}
-            {% get_admin_log 10 as admin_log for_user user %}
-            {% if not admin_log %}
-            <p>{% trans 'None available' %}</p>
-            {% else %}
-            <ul class="actionlist">
-            {% for entry in admin_log %}
-            <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
-                {% if entry.is_deletion or not entry.get_admin_url %}
-                    {{ entry.object_repr }}
-                {% else %}
-                    <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
-                {% endif %}
-                <br/>
-                {% if entry.content_type %}
-                    <span class="mini quiet">{% filter capfirst %}{% trans entry.content_type.name %}{% endfilter %}</span>
-                {% else %}
-                    <span class="mini quiet">{% trans 'Unknown content' %}</span>
-                {% endif %}
-            </li>
-            {% endfor %}
-            </ul>
-            {% endif %}
-    </div>
-</div>
-
-
-<div id="result">
-</div>
-<!-- <div id="content-statistics_head">
-    <a href="#" class="section" >Date:<input type="text" id="datepicker"></a>
-    <input id="button" type="button" value="Go"></input>
-</div > -->
-{% endblock %}

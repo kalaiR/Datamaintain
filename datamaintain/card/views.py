@@ -1,27 +1,19 @@
 import os
-import operator
+
 
 from django.conf import settings
-from django.contrib.admin.views.decorators import staff_member_required
-from django.core.exceptions import PermissionDenied
-from django.db.models import F, Q
+
 from django.http import HttpResponse, Http404
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.db.models import Count, Sum, Avg
-
 # from core.config import COUNTRIES
 from datamaintain.models import *
 import datetime
 
-# @staff_member_required
+
 def create_attendance(request):
-    """ Get actor's card
-    """
-#     actors = search_actor(request, True)
-#     card_dict = actor_basic(request, actors, True)
-#     card_dict.update({'actors': actors})
+
 
     admission= Student_Admission.objects.all()
     print admission

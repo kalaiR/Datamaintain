@@ -25,22 +25,6 @@ def faq(request):
 def playground(request):
     import datamaintain.api
     import fxapi
-
-#     all_actions = {
-#         'leads': leads.api.Rest,
-#         'search': leads.api.Search,
-#         'categories': leads.api.LeadCategoryAPI,
-#         'transactions': leads.api.Transactions,
-#         'actors': leads.api.Actors,
-#         'trades':leads.api.Trades,
-#         'ActorCampaignEmailStatistics':leads.api.ActorCampaignEmailStatistics,
-#         'filters':leads.api.LeadFilterAPI,
-#         'recentleads':leads.api.RecentLeadsAPI,
-#         'recentsearch':leads.api.RecentSearchAPI,
-#         'leads_provided':leads.api.LeadProvidedAPI,
-#         'leads_bought':leads.api.LeadBoughtAPI,
-#     }
-
     all_actions = {
         'absentlist': datamaintain.api.AbsentList_RestAPI,         
     }
